@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/a-h/templ v0.2.543 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/dlclark/regexp2 v1.4.0 // indirect

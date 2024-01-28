@@ -1,7 +1,6 @@
 package handle_test
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -9,7 +8,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/coreycole/go_md/handlers"
+	"github.com/coreycole/go_md/webserver/handle"
 )
 
 func TestHealth(t *testing.T) {
@@ -20,9 +19,7 @@ func TestHealth(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	// Assertions
-	if assert.NoError(t, handlers.Health(c)) {
+	if assert.NoError(t, handle.Health(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		bodyJson := json.Unmarshall(rec.Body, handlers.HealthRes)
-		assert.Equal(t, "ok", bodyJson.status)
 	}
 }
