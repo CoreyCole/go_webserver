@@ -1,0 +1,29 @@
+package templ
+
+templ Page(content string) string {
+	return `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Markdown Viewer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        clifford: '#da373d',
+      }
+    }
+  }
+}
+  </script>
+</head>
+<body>
+    <div class="content">
+        ` + content + `
+    </div>
+</body>
+</html>
+`
+}
