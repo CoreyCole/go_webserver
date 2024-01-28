@@ -7,7 +7,7 @@ Run the server.
 go run main.go
 ```
 
-Watch & generate templ template views
+Watch & generate [templ template](https://templ.guide/quick-start/installation) views
 ```bash
 templ generate --watch
 ```
