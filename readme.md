@@ -1,5 +1,5 @@
 # go markdown webserver with code highlighting
-- Rendered markdown at [`http://localhost:3000/md/test.md`](http://localhost:3000/md/test.md).
+- Rendered markdown at [http://localhost:3000/md/test.md](http://localhost:3000/md/test.md).
 - Add markdown files to the `md/` directory.
 
 Run the server. 
