@@ -1,21 +1,8 @@
 package views
 
-var slate = "#272822"
-
-css CodeBlock() {
-  background-color: { slate };
-  padding: 1rem;
-  border-radius: 0.25rem;
-  overflow-x: auto;
-}
 css Content() {
   padding: 1rem;
-}
-
-templ CodeCard(code templ.Component) {
-  <div class={ CodeBlock }>
-    @code
-  </div>
+  background-color: #000;
 }
 
 templ MarkdownPage(content templ.Component) {
@@ -26,15 +13,14 @@ templ MarkdownPage(content templ.Component) {
     <script src="https://cdn.tailwindcss.com"></script>
     <style type="text/css">
       p {
-        margin: 8px;
+        font-size: 1.2rem;
       }
-      pre {
-        background-color: #fafafa;
+      div.code {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
+      div.code > pre {
         padding: 1rem;
-        border-radius: 0.25rem;
-        overflow-x: auto;
-        padding: 8px !important;
-        border: red 2px !important;
       }
     </style>
   </head>

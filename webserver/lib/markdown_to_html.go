@@ -2,6 +2,7 @@ package lib
 
 import (
 	"errors"
+	"fmt"
 	"io"
 
 	"github.com/alecthomas/chroma"
@@ -33,6 +34,8 @@ func NewMarkdownToHtmlRenderer(highlightStyleString string) (*MarkdownToHTMLRend
 	highlightStyle := styles.Get(DEFAULT_CODE_STYLE)
 	if style, ok := styles.Registry[styleName]; ok {
 		highlightStyle = style
+	} else {
+		fmt.Printf("invaid style: %s\n", styleName)
 	}
 	htmlFormatter := html.New(html.Standalone(true), html.TabWidth(2))
 	if htmlFormatter == nil {
@@ -79,10 +82,17 @@ func renderCode(
 	codeBlock *ast.CodeBlock,
 	highlightStyle *chroma.Style,
 	htmlFormatter *html.Formatter,
-) {
+) error {
 	defaultLang := ""
 	lang := string(codeBlock.Info)
-	htmlHighlight(w, string(codeBlock.Literal), lang, defaultLang, highlightStyle, htmlFormatter)
+	return htmlHighlight(
+		w,
+		string(codeBlock.Literal),
+		lang,
+		defaultLang,
+		highlightStyle,
+		htmlFormatter,
+	)
 }
 
 func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter) *mdhtml.Renderer {
@@ -90,7 +100,13 @@ func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter)
 		Flags: mdhtml.CommonFlags,
 		RenderNodeHook: func(w io.Writer, node ast.Node, _ bool) (ast.WalkStatus, bool) {
 			if code, ok := node.(*ast.CodeBlock); ok {
-				renderCode(w, code, highlightStyle, htmlFormatter)
+				w.Write([]byte("<div class=\"code rounded-xl shadow-lg\">"))
+				err := renderCode(w, code, highlightStyle, htmlFormatter)
+				if err != nil {
+					fmt.Println("error rendering code")
+					return ast.Terminate, false
+				}
+				w.Write([]byte("</div>"))
 				return ast.GoToNext, true
 			}
 			return ast.GoToNext, false
