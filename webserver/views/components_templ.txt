@@ -1,2 +1,0 @@
-<!doctype html><html><head><title>Markdown Viewer</title><script src=\"https://cdn.tailwindcss.com\"></script></head><body><div class=\"content\">
-</div></body></html>

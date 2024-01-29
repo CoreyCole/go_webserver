@@ -5,6 +5,7 @@ replace github.com/coreycole/go_md => ./
 go 1.21.6
 
 require (
+	github.com/a-h/templ v0.2.543
 	github.com/alecthomas/chroma v0.10.0
 	github.com/gomarkdown/markdown v0.0.0-20231222211730-1d6d20845b47
 	github.com/labstack/echo v3.3.10+incompatible
@@ -12,7 +13,6 @@ require (
 )
 
 require (
-	github.com/a-h/templ v0.2.543 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/dlclark/regexp2 v1.4.0 // indirect
@@ -24,7 +24,7 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.17.0 // indirect
 	golang.org/x/net v0.19.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
