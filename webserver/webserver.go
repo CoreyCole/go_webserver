@@ -3,10 +3,11 @@ package webserver
 import (
 	"fmt"
 
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 
-	"github.com/coreycole/go_md/webserver/handle"
+	hd "github.com/coreycole/go_md/webserver/handle"
+	mw "github.com/coreycole/go_md/webserver/middleware"
 )
 
 func Start(port string) error {
@@ -15,12 +16,13 @@ func Start(port string) error {
 	e := echo.New()
 
 	// Middleware
-	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(mw.ZeroLog())
 
 	// Routes
-	e.GET("/health", handle.Health)
-	e.GET("/md/:filename", handle.ServeMarkdown)
+	e.GET("/health", hd.Health)
+	e.GET("/md/:filename", hd.ServeMarkdown)
+	e.Static("/bevy", "www/bevy")
 
 	// Start server
 	e.Logger.Fatal(e.Start(port))
