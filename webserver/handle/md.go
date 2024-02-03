@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 
 	"github.com/coreycole/go_md/webserver/lib"
 	"github.com/coreycole/go_md/webserver/views"
@@ -13,7 +13,7 @@ import (
 func ServeMarkdown(c echo.Context) error {
 	filename := c.Param("filename")
 	style := c.QueryParam("style")
-	md, err := os.ReadFile("md/" + filename)
+	md, err := os.ReadFile("www/md/" + filename)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "File not found")
 	}
