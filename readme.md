@@ -22,3 +22,20 @@ Run all Tests
 ```bash
 go test ./...
 ```
+
+Build binary
+```bash
+go build -o bin/go_webserver main.go
+```
+
+Systemd setup
+```bash
+# create group and user for systemd service
+sudo groupadd gowebserver
+sudo useradd -g gowebserver gowebserver
+
+# activate service
+systemctl daemon-reload
+service go_webserver start
+service go_webserver status
+```
