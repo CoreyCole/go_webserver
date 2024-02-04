@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/coreycole/go_md/webserver"
+	"github.com/coreycole/go_webserver/webserver"
 )
 
 func main() {

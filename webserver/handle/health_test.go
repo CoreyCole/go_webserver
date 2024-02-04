@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/coreycole/go_md/webserver/handle"
+	"github.com/coreycole/go_webserver/webserver/handle"
 )
 
 func TestHealth(t *testing.T) {

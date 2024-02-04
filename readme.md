@@ -1,5 +1,5 @@
 # go markdown webserver with code highlighting
-- Web Assembly game written in Rust at [http://localhost:3000/bevy](http://localhost:3000/bevy)
+- Web Assembly game written in Rust at [http://localhost:3000/games](http://localhost:3000/games)
 - Rendered markdown at [http://localhost:3000/md/test.md](http://localhost:3000/md/test.md).
 - Add markdown files to the `www/md/` directory.
 

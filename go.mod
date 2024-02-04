@@ -1,6 +1,6 @@
-module github.com/coreycole/go_md
+module github.com/coreycole/go_webserver
 
-replace github.com/coreycole/go_md => ./
+replace github.com/coreycole/go_webserver => ./
 
 go 1.21.6
 

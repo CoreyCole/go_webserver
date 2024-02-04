@@ -6,8 +6,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/coreycole/go_md/webserver/lib"
-	"github.com/coreycole/go_md/webserver/views"
+	lib "github.com/coreycole/go_webserver/webserver/lib"
+	vi "github.com/coreycole/go_webserver/webserver/views"
 )
 
 func ServeMarkdown(c echo.Context) error {
@@ -34,7 +34,7 @@ func ServeMarkdown(c echo.Context) error {
 
 	// Use the Page templ component to construct the full page HTML
 	mdComponent := lib.HTMLToComponent(mdHTML)
-	view := views.MarkdownPage(mdComponent)
+	view := vi.MarkdownPage(mdComponent)
 
 	if err := view.Render(c.Request().Context(), c.Response().Writer); err != nil {
 		return echo.NewHTTPError(

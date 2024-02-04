@@ -6,25 +6,32 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	hd "github.com/coreycole/go_md/webserver/handle"
-	mw "github.com/coreycole/go_md/webserver/middleware"
+	ha "github.com/coreycole/go_webserver/webserver/handle"
+	mi "github.com/coreycole/go_webserver/webserver/middleware"
 )
 
 func Start(port string) error {
-	fmt.Println("starting on port", port)
-	// Echo instance
 	e := echo.New()
 
 	// Middleware
 	e.Use(middleware.Recover())
-	e.Use(mw.ZeroLog())
+	e.Use(mi.ZeroLog())
 
 	// Routes
-	e.GET("/health", hd.Health)
-	e.GET("/md/:filename", hd.ServeMarkdown)
-	e.Static("/bevy", "www/bevy")
+	e.GET("/health", ha.Health)
+	// render markcown
+	e.GET("/md/:filename", ha.ServeMarkdown)
+	// game index pages e.g.
+	// http://localhost:3000/games/giga_platformer-97832db24b9e2bb6/game
+	e.GET("/games/:filename/game", ha.ServeBevy)
 
-	// Start server
-	e.Logger.Fatal(e.Start(port))
-	return nil
+	// serve static files as a fallback (after all handlers)
+	// game assets loaded with paths e.g.
+	// http://localhost:3000/games/giga_platformer-97832db24b9e2bb6/assets/*
+	e.Static("/", "www/")
+
+	fmt.Println("starting on port", port)
+	err := e.Start(port)
+	e.Logger.Fatal(err)
+	return err
 }
