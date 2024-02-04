@@ -1,4 +1,6 @@
 tmp/
 !bin/.gitkeep
 bin/
+!log/.gitkeep
+log/
 .DS_Store

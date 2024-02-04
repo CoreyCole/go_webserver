@@ -7,11 +7,11 @@ Type=simple
 User=gowebserver
 Group=gowebserver
 WorkingDirectory=/home/ubuntu/go_webserver
-ExecStart=./bin/go_webserver
+ExecStart=/home/ubuntu/go_webserver/bin/go_webserver
 Restart=on-failure
 RestartSec=10
-StandardOutput=append:/home/ubuntu/go_webserver.log
-StandardError=append:/home/ubuntu/go_webserver.error.log
+StandardOutput=append:/home/ubuntu/go_webserver/log/go_webserver.log
+StandardError=append:/home/ubuntu/go_webserver/log/go_webserver.error.log
 SyslogIdentifier=gowebserver
 [Install]
 WantedBy=multi-user.target
