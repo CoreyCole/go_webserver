@@ -1,13 +1,13 @@
 [Unit]
 Description=gowebserver
-ConditionPathExists=/home/ubuntu/go_webserver/go_webserver
+ConditionPathExists=/home/ubuntu/go_webserver/bin/go_webserver
 After=network.target
 [Service]
 Type=simple
 User=gowebserver
 Group=gowebserver
-WorkingDirectory=/home/lucian/myapp
-ExecStart=/usr/local/go/bin/go run .
+WorkingDirectory=/home/ubuntu/go_webserver
+ExecStart=/home/ubuntu/go_webserver/bin/go_webserver
 Restart=on-failure
 RestartSec=10
 StandardOutput=syslog
