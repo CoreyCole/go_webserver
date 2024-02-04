@@ -30,6 +30,9 @@ go build -o bin/go_webserver main.go
 
 Systemd setup
 ```bash
+# copy config as root
+sudo cp go_webserver.service /etc/systemd/system/go_webserver.service
+
 # create group and user for systemd service
 sudo groupadd gowebserver
 sudo useradd -g gowebserver gowebserver
