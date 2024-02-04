@@ -1,11 +1,11 @@
 [Unit]
 Description=gowebserver
-ConditionPathExists=/home/ubuntu/go_webserver/bin/go_webserver
+ConditionPathExists=/home/ubuntu/go_webserver/bin
 After=network.target
 [Service]
 Type=simple
-User=gowebserver
-Group=gowebserver
+User=ubuntu
+Group=ubuntu
 WorkingDirectory=/home/ubuntu/go_webserver
 ExecStart=/home/ubuntu/go_webserver/bin/go_webserver
 Restart=on-failure

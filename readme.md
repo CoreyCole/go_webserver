@@ -33,14 +33,6 @@ Systemd setup
 # copy config as root
 sudo cp go_webserver.service /etc/systemd/system/go_webserver.service
 
-# create group and user for systemd service
-sudo groupadd gowebserver
-sudo useradd -g gowebserver gowebserver
-
-# chown the repo to the systemd service user (from repo root)
-sudo chown -R gowebserver:gowebserver bin
-sudo chown -R gowebserver:gowebserver log
-
 # activate service
 systemctl daemon-reload
 service go_webserver start
