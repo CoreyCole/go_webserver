@@ -18,12 +18,13 @@ func Start(port string) error {
 	e.Use(mi.ZeroLog())
 
 	// Routes
-	e.GET("/health", ha.Health)
+	e.GET("/", ha.GetWelcome)
+	e.GET("/health", ha.GetHealth)
 	// render markcown
-	e.GET("/md/:filename", ha.ServeMarkdown)
+	e.GET("/md/:filename", ha.GetMarkdownFile)
 	// game index pages e.g.
 	// http://localhost:3000/games/giga_platformer-97832db24b9e2bb6/game
-	e.GET("/games/:filename/game", ha.ServeBevy)
+	e.GET("/games/:filename/game", ha.GetGame)
 
 	// serve static files as a fallback (after all handlers)
 	// game assets loaded with paths e.g.

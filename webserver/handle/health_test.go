@@ -19,7 +19,7 @@ func TestHealth(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	// Assertions
-	if assert.NoError(t, handle.Health(c)) {
+	if assert.NoError(t, handle.GetHealth(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 	}
 }

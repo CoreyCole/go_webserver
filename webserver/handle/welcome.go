@@ -10,10 +10,13 @@ import (
 	vi "github.com/coreycole/go_webserver/webserver/views"
 )
 
-func GetMarkdownFile(c echo.Context) error {
-	filename := c.Param("filename")
-	style := c.QueryParam("style")
-	md, err := os.ReadFile("www/md/" + filename)
+const (
+	style     = "monokai"
+	welcomeMd = "www/md/welcome.md"
+)
+
+func GetWelcome(c echo.Context) error {
+	md, err := os.ReadFile(welcomeMd)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "File not found")
 	}
@@ -34,7 +37,7 @@ func GetMarkdownFile(c echo.Context) error {
 
 	// Use the Page templ component to construct the full page HTML
 	mdComponent := lib.HTMLToComponent(mdHTML)
-	view := vi.MarkdownPage(mdComponent)
+	view := vi.WelcomePage(mdComponent)
 
 	if err := view.Render(c.Request().Context(), c.Response().Writer); err != nil {
 		return echo.NewHTTPError(

@@ -24,11 +24,11 @@ if (!error.message.startsWith("Using exceptions for control flow,")) {
 	return lib.HTMLToComponent(jsString)
 }
 
-func ServeBevy(c echo.Context) error {
+func GetGame(c echo.Context) error {
 	filename := c.Param("filename")
 	fmt.Println(">>>>>>>>>>> file = " + filename)
-	js := fmt.Sprintf("/bevy/%s.js", filename)
-	wasm := fmt.Sprintf("/bevy/%s_bg.wasm", filename)
+	js := fmt.Sprintf("/games/%s/%s.js", filename, filename)
+	wasm := fmt.Sprintf("/games/%s/%s_bg.wasm", filename, filename)
 	loadscript := BevyLoadScript(js, wasm)
 	view := vi.BevyPage(js, wasm, loadscript)
 

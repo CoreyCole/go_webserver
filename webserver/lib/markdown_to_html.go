@@ -97,10 +97,10 @@ func renderCode(
 
 func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter) *mdhtml.Renderer {
 	opts := mdhtml.RendererOptions{
-		Flags: mdhtml.CommonFlags,
-		RenderNodeHook: func(w io.Writer, node ast.Node, _ bool) (ast.WalkStatus, bool) {
+		Flags: mdhtml.CommonFlags | mdhtml.HrefTargetBlank,
+		RenderNodeHook: func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
 			if code, ok := node.(*ast.CodeBlock); ok {
-				w.Write([]byte("<div class=\"code rounded-xl shadow-lg\">"))
+				w.Write([]byte(`<div class="my-4 rounded-xl shadow-lg [&>pre]:p-4">`))
 				err := renderCode(w, code, highlightStyle, htmlFormatter)
 				if err != nil {
 					fmt.Println("error rendering code")
@@ -109,6 +109,75 @@ func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter)
 				w.Write([]byte("</div>"))
 				return ast.GoToNext, true
 			}
+			if link, ok := node.(*ast.Link); ok {
+				if entering {
+					w.Write(
+						[]byte(
+							`<a class="font-medium text-green-600 dark:text-green-400 hover:underline"`,
+						),
+					)
+					if len(link.Title) > 0 {
+						w.Write([]byte(fmt.Sprintf(` title="link" href="%s"`, link.Title)))
+					} else if len(link.Destination) > 0 {
+						w.Write([]byte(fmt.Sprintf(` href="%s"`, link.Destination)))
+					}
+					w.Write([]byte(">"))
+				} else {
+					w.Write([]byte("</a>"))
+				}
+				return ast.GoToNext, true
+			}
+			if list, ok := node.(*ast.List); ok {
+				listClass := "list-none"
+				if list.ListFlags == ast.ListTypeOrdered {
+					listClass = "list-decimal"
+				}
+				attr := list.Attribute
+				if attr == nil {
+					attr = &ast.Attribute{}
+				}
+				attr.Classes = append(attr.Classes, []byte(listClass))
+				list.Attribute = attr
+			}
+			if heading, ok := node.(*ast.Heading); ok {
+				fontSize := ""
+				switch heading.Level {
+				case 1:
+					fontSize = "text-5xl"
+				case 2:
+					fontSize = "text-4xl"
+				case 3:
+					fontSize = "text-3xl"
+				case 4:
+					fontSize = "text-2xl"
+				case 5:
+					fontSize = "text-xl"
+				case 6:
+					fontSize = "text-lg"
+				}
+				attr := heading.Attribute
+				if attr == nil {
+					attr = &ast.Attribute{}
+				}
+				attr.Classes = append(
+					attr.Classes,
+					[]byte(fmt.Sprintf(
+						"%s my-4 font-bold leading-7 text-green-900",
+						fontSize,
+					)),
+				)
+				heading.Attribute = attr
+			}
+			if p, ok := node.(*ast.Paragraph); ok {
+				attr := p.Attribute
+				if attr == nil {
+					attr = &ast.Attribute{}
+				}
+				attr.Classes = append(attr.Classes, []byte("text-lg"))
+				p.Attribute = attr
+			}
+
+			// return false to tell html.Renderer to use default render
 			return ast.GoToNext, false
 		},
 	}
