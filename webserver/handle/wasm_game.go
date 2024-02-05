@@ -31,7 +31,6 @@ func GetGame(c echo.Context) error {
 	wasm := fmt.Sprintf("/games/%s/%s_bg.wasm", filename, filename)
 	loadscript := BevyLoadScript(js, wasm)
 	view := vi.BevyPage(js, wasm, loadscript)
-
 	if err := view.Render(c.Request().Context(), c.Response().Writer); err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError,
