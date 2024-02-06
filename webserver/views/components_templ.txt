@@ -1,9 +1,0 @@
-<h1 class=\"text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight\">Corey Cole’s links</h1>
-<!doctype html><html class=\"m-0 h-full bg-black\"><head><title>Corey Cole's Web Server</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/build.css\"><style type=\"text/css\">\n      html, body {\n        margin: 0;\n        height: 100%;\n      }\n      p {\n        font-size: 1.2rem;\n      }\n      div.code {\n        margin-top: 1rem;\n        margin-bottom: 1rem;\n      }\n      div.code > pre {\n        padding: 1rem;\n      }\n    </style></head><body class=\"dark m-0 h-full\"><div class=\"p-4 m-0 h-full bg-black text-slate-300\">
-</div></body></html>
-<!doctype html><html class=\"m-0 h-full bg-black\"><head><title>Markdown Viewer</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/build.css\"></head><body class=\"dark m-0 h-full\"><div class=\"p-4 m-0 h-full bg-black text-slate-300\">
-</div></body></html>
-<!doctype html><html><head><link rel=\"preload\" href=\"
-\" as=\"fetch\" type=\"application/wasm\" crossorigin=\"\"><link rel=\"modulepreload\" href=\"
-\"></head><style type=\"text/css\">\n  html, body {\n     margin: 0;\n     height: 100%;\n  }\n  </style><body>
-</body></html>
