@@ -1,7 +1,6 @@
 # go markdown webserver with code highlighting
-- Web Assembly game written in Rust at [https://coreycc.com/games/giga_platformer-97832db24b9e2bb6/game](https://coreycc.com/games/giga_platformer-97832db24b9e2bb6/game)
-- Rendered markdown at [https://coreycc.com/md/test.md](https://coreycc.com/md/test.md).
 - Add markdown files to the `www/md/` directory.
+- Demo at [coreycc.com](https://coreycc.com/md/test.md)
 
 Run the server. 
 ```bash

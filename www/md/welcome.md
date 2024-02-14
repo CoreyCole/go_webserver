@@ -5,6 +5,6 @@
 - [stack overflow](https://stackoverflow.com/users/3969602/corey-cole)
 
 ## Projects
-- [Web Assembly game written in Rust](/games/giga_platformer-7143ed686304a07e/game)
-- [Rendered markdown with code syntax highlighting](/md/test.md)
+- Web Assembly [game](/games/giga_platformer/game) written in Rust
+- [Rendered markdown](https://github.com/CoreyCole/go_webserver/blob/main/webserver/lib/markdown_to_html.go) with code syntax highlighting ([demo](/md/test.md))
 
