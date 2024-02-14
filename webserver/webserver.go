@@ -23,8 +23,8 @@ func Start(port string) error {
 	// render markcown
 	e.GET("/md/:filename", ha.GetMarkdownFile)
 	// game index pages e.g.
-	// http://localhost:3000/games/giga_platformer-97832db24b9e2bb6/game
-	e.GET("/games/:filename/game", ha.GetGame)
+	// http://localhost:3000/games/giga_platformer/game
+	e.GET("/games/:gameName/game", ha.GetGame)
 
 	// serve static files as a fallback (after all handlers)
 	// game assets loaded with paths e.g.
