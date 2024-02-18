@@ -12,7 +12,7 @@ brew tap lockbook/lockbook && brew install lockbook
 ```
 - [Or build from source](https://github.com/lockbook/lockbook/tree/master/docs#cli).
 - Guide for tab completions on [bash or zsh](https://github.com/lockbook/lockbook/blob/master/docs/guides/cli-completions.md).
-```bash
+```
 lockbook fs
 account      -- account management commands
 completions  -- generate completions for a given shell
@@ -30,7 +30,7 @@ share        -- sharing related commands
 sync         -- sync your local changes back to lockbook servers
 ```
 #### The `lockbook fs` command
-The command `lockbook fs` will automatically sync your entire lockbook with a localhost NFS drive in `/tmp/lockbook`
+Automatically syncs your entire lockbook with a localhost NFS drive in `/tmp/lockbook`
 ```bash
 lockbook fs
 ```
