@@ -13,7 +13,7 @@ brew tap lockbook/lockbook && brew install lockbook
 - [Or build from source](https://github.com/lockbook/lockbook/tree/master/docs#cli).
 - Guide for tab completions on [bash or zsh](https://github.com/lockbook/lockbook/blob/master/docs/guides/cli-completions.md).
 ```
-lockbook fs
+lockbook
 account      -- account management commands
 completions  -- generate completions for a given shell
 copy         -- import files from your file system into lockbook
