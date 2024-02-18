@@ -36,7 +36,7 @@ lockbook fs
 ```
 
 ### Back up our dotfiles
-Please note, this operation will replace your existing directory with a symlink. It's highly recommended to backup the existing directory before proceeding to avoid losing configurations.
+Please note, this guide will replace your existing directory with a symlink. It's highly recommended to backup the existing directory before proceeding to avoid losing configurations.
 ```bash
 cp -r ~/.config/nvim/lua/custom ~/.config/nvim/lua/custom_backup
 ```
