@@ -64,7 +64,7 @@ func ResumeJSONToHTML(path string) (string, error) {
 		htmlSlice = append(
 			htmlSlice,
 			fmt.Sprintf(
-				`<p class="font-bold text-lg">%s</p><p class="italic text-sm">%s</p>`,
+				`<p class="font-bold text-xl">%s</p><p class="italic text-lg">%s</p>`,
 				award.Title,
 				award.Summary,
 			),
@@ -78,10 +78,10 @@ func ResumeJSONToHTML(path string) (string, error) {
 			htmlSlice,
 			fmt.Sprintf(
 				`<div class="flex justify-between items-center">
-          <span class="text-start font-bold">%s</span>
-          <span class="text-end italic">%s to %s</span>
+          <span class="text-start font-bold text-xl">%s</span>
+          <span class="text-end italic text-sm">%s to %s</span>
         </div>
-        <p>%s</p>`,
+        <p class="text-sm">%s</p>`,
 				work.Position,
 				work.StartDate,
 				work.EndDate,
@@ -122,9 +122,9 @@ func ResumeJSONToHTML(path string) (string, error) {
 			fmt.Sprintf(
 				`<div class="flex justify-between items-center">
           <span class="text-start font-bold">%s, %s</span>
-          <span class="text-end italic">%s to %s</span>
+          <span class="text-end italic text-sm">%s to %s</span>
         </div>
-        <p>%s</p>`,
+        <p class="pb-6">%s</p>`,
 				edu.Institution,
 				edu.StudyType,
 				edu.StartDate,
@@ -134,7 +134,7 @@ func ResumeJSONToHTML(path string) (string, error) {
 		)
 	}
 
-	htmlSlice = append(htmlSlice, "</div>") // Close the main div
+	htmlSlice = append(htmlSlice, "</div>")
 
-	return strings.Join(htmlSlice, "\n"), nil
+	return strings.Join(htmlSlice, ""), nil
 }
