@@ -1,7 +1,7 @@
 <h1 class=\"text-2xl font-bold font-italic bold italic not-italic leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight\">Corey Cole’s links</h1>
-<!doctype html><html class=\"m-0 h-full bg-black\"><head><title>Corey Cole's Web Server</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/build.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"/index.css\"></head><body class=\"dark m-0 h-full\"><div class=\"p-4 m-0 h-full bg-black text-slate-300\">
+<!doctype html><html class=\"m-0 h-full bg-black\"><head><title>Corey Cole's Web Server</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/build.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"/index.css\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/favicons/favicon-32x32.png\"></head><body class=\"dark m-0 h-full\"><div class=\"p-4 m-0 h-full bg-black text-slate-300\">
 </div></body></html>
-<!doctype html><html class=\"m-0 h-full bg-black\"><head><title>Markdown Viewer</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/build.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"/index.css\"></head><body class=\"dark m-0 h-full\"><div class=\"p-4 m-0 h-full bg-black text-slate-300\">
+<!doctype html><html class=\"m-0 h-full bg-black\"><head><title>Markdown Viewer</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/build.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"/index.css\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/favicons/favicon-32x32.png\"></head><body class=\"dark m-0 h-full\"><div class=\"p-4 m-0 h-full bg-black text-slate-300\">
 </div></body></html>
 <!doctype html><html><head><link rel=\"preload\" href=\"
 \" as=\"fetch\" type=\"application/wasm\" crossorigin=\"\"><link rel=\"modulepreload\" href=\"
