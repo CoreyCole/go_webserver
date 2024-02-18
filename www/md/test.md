@@ -1,16 +1,20 @@
 # heading 1
-
 ## heading 2
+### heading 3
+#### heading 4
+##### heading 5
+###### heading 6
+### ordered lists
 1) ol 1
 1) ol 2
 1) ol 3
 
-### heading 3
+### unordered lists
 * ul 1
 * ul 2
 * ul 3
 
-#### heading 4
+### nested lists
 - ul 4
   - ul 4.1
     - ul 4.1.1

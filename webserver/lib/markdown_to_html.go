@@ -127,18 +127,6 @@ func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter)
 				}
 				return ast.GoToNext, true
 			}
-			if list, ok := node.(*ast.List); ok {
-				listClass := "list-none"
-				if list.ListFlags == ast.ListTypeOrdered {
-					listClass = "list-decimal"
-				}
-				attr := list.Attribute
-				if attr == nil {
-					attr = &ast.Attribute{}
-				}
-				attr.Classes = append(attr.Classes, []byte(listClass))
-				list.Attribute = attr
-			}
 			if heading, ok := node.(*ast.Heading); ok {
 				fontSize := ""
 				switch heading.Level {
@@ -168,6 +156,33 @@ func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter)
 				)
 				heading.Attribute = attr
 			}
+			if list, ok := node.(*ast.List); ok {
+				listClass := "list-disc"
+				if list.ListFlags&ast.ListTypeOrdered != 0 {
+					listClass = "list-decimal"
+				}
+				if entering {
+					// Start of the list
+					fmt.Fprintf(w, `<ul class="%s">`, listClass)
+				} else {
+					// End of the list
+					fmt.Fprintf(w, "</ul>")
+				}
+				return ast.GoToNext, true
+			}
+			if li, ok := node.(*ast.ListItem); ok {
+				attr := li.Attribute
+				if attr == nil {
+					attr = &ast.Attribute{}
+				}
+				attr.Classes = append(attr.Classes, []byte("text-lg"))
+				if entering {
+					w.Write([]byte(`<li>`))
+				} else {
+					w.Write([]byte("</li>"))
+				}
+				return ast.GoToNext, true
+			}
 			if p, ok := node.(*ast.Paragraph); ok {
 				attr := p.Attribute
 				if attr == nil {
@@ -182,4 +197,20 @@ func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter)
 		},
 	}
 	return mdhtml.NewRenderer(opts)
+}
+
+// assumes lists can be wrapped and we will still find parent lists, for exmaple
+// ````
+// <div><ul><li>list item</li></ul></div>
+// ````
+func calculateListDepth(node ast.Node) int {
+	depth := 0
+	parent := node.GetParent()
+	for parent != nil {
+		if _, ok := parent.(*ast.List); ok {
+			depth++
+		}
+		parent = parent.GetParent()
+	}
+	return depth
 }
