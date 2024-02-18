@@ -3,7 +3,7 @@ package views
 /// Any tailwind classes that are used inside Go files should be added somewhere here
 /// This way, the tailwind CLI knows to include them in `www/build.css`
 templ Test() {
-  <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Corey Cole’s links</h1>
+  <h1 class="text-2xl font-bold font-italic bold italic not-italic leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Corey Cole’s links</h1>
 }
 
 templ WelcomePage(content templ.Component) {
@@ -13,22 +13,6 @@ templ WelcomePage(content templ.Component) {
     <title>Corey Cole's Web Server</title>
     <link rel="stylesheet" type="text/css" href="/build.css" />
     <link rel="stylesheet" type="text/css" href="/index.css" />
-    <style type="text/css">
-      html, body {
-        margin: 0;
-        height: 100%;
-      }
-      p {
-        font-size: 1.2rem;
-      }
-      div.code {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-      }
-      div.code > pre {
-        padding: 1rem;
-      }
-    </style>
   </head>
   <body class="dark m-0 h-full">
     <div class="p-4 m-0 h-full bg-black text-slate-300">
@@ -45,18 +29,6 @@ templ MarkdownPage(content templ.Component) {
     <title>Markdown Viewer</title>
     <link rel="stylesheet" type="text/css" href="/build.css" />
     <link rel="stylesheet" type="text/css" href="/index.css" />
-//    <style type="text/css">
-//      p {
-//        font-size: 1.2rem;
-//      }
-//      div.code {
-//        margin-top: 1rem;
-//        margin-bottom: 1rem;
-//      }
-//      div.code > pre {
-//        padding: 1rem;
-//      }
-//    </style>
   </head>
   <body class="dark m-0 h-full">
     <div class="p-4 m-0 h-full bg-black text-slate-300">

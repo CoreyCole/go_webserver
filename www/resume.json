@@ -1,0 +1,154 @@
+{
+  "selectedTemplate": 1,
+  "headings": {
+    "education": "Education",
+    "projects": "",
+    "skills": "Skills, Tools & Experience",
+    "work": "Work Experience",
+    "awards": "Profile"
+  },
+  "basics": {
+    "name": "Corey Cole",
+    "phone": "(201) 245-3660",
+    "location": {
+      "address": "Seattle, WA"
+    },
+    "email": "ccoreycole@gmail.com",
+    "website": "https://coreycc.com"
+  },
+  "education": [
+    {
+      "institution": "University of Washington, Dean's List",
+      "studyType": "Bachelor of Science",
+      "startDate": "Sep 2013",
+      "endDate": "June 2017",
+      "location": "Seattle, WA",
+      "area": "Computer Science custom track in Informatics, Math minor"
+    }
+  ],
+  "work": [
+    {
+      "highlights": [
+        "Built mobile voice app (Ciremi) that creates contacts with notes in React Native Expo using GPT4 api",
+        "Built full stack apps for 1000s of users in Typescript/React Native/AWS Lambda/Fargate/EC2",
+        "Mentored junior developers and interns",
+        "Reversed technical debt through codebase cleanups resulting in improved engineer productivity",
+        "Organized and managed team tasks with Github/Google Sheets/Slack automation/Jira/Trello",
+        "Quantized machine learning model for real-time audio signal inference on Android",
+        "Built hardware integration for 6 figure corporate contract with Hewlet Packard (HP) in C/GStreamer",
+        "Built real-time (<200ms) audio signal processing system to synchronize and echo-cancel in C/Rust"
+      ],
+      "position": "Kernel Labs",
+      "location": "Seattle, WA",
+      "startDate": "Jan 2020",
+      "endDate": "Dec 2023",
+      "company": "Senior Software Engineer, Cofounder of Omnicom.ai (microphone sync app)"
+    },
+    {
+      "highlights": [
+        "Built Alexa & Google Home voice social network (like Houseparty) using Typescript/Python/AWS",
+        "Built mobile app for \"Remote Reading\" through audio files using Android/iOS/Flutter/Firebase/AWS",
+        "Built game (like Cards Against Humanity) with in-house voice synthesis ML model",
+        "Built Chrome Extension for de-noising audio with in-house ML model using JavaScript and Python",
+        "Built a CICD pipeline using git webhooks, Docker, and Codeship",
+        "Built an internal tool for browsing user analytics, logs and errors"
+      ],
+      "company": "Software Engineer, Cofounder of Halloo (Alexa/Google Home app)",
+      "location": "Seattle, WA",
+      "startDate": "Apr 2018",
+      "endDate": "Jan 2020",
+      "position": "Kernel Labs"
+    },
+    {
+      "highlights": [
+        "Built best-in-conference demo for VLDB 2018 and demo'd at ACM SIGMOD 2018",
+        "Developed a SQL-based framework for drawing causal inference using Python and Postgres",
+        "Leveraged SQL to scale coarsened exact matching past current tools",
+        "Visualized and fixed bias in OLAP queries using Angular and Typescript"
+      ],
+      "company": "Research Demo Builder for Dan Suciu",
+      "location": "Seattle, WA",
+      "startDate": "Sep 2015",
+      "endDate": "May 2018",
+      "position": "University of Washington CSE"
+    },
+    {
+      "highlights": [
+        "Built restaurant mobile web app for the dine-in experience of ordering and real-time staff messaging",
+        "Results correlated with an increase in revenue per customer in restaurant user testing",
+        "Built the app from scratch, along with a lean team of 1-2 other engineers",
+        "Led weekly meetings & task organization",
+        "Owned product design and User Experience"
+      ],
+      "endDate": "May 2018",
+      "startDate": "Sep 2015",
+      "location": "Seattle, WA",
+      "company": "Software Engineer, Cofounder",
+      "position": "BellHapp Inc"
+    },
+    {
+      "highlights": [
+        "Built Magento e-commerce front-end linked to our legacy back-end as a proof of concept in PHP/SQL"
+      ],
+      "company": "Software Engineer",
+      "location": "King of Prussia, PA",
+      "startDate": "Jun 2015",
+      "endDate": "Sep 2015",
+      "position": "eBay Enterprise"
+    }
+  ],
+  "skills": [
+    {
+      "level": "",
+      "keywords": [
+        "Typescript",
+        "SQL",
+        "C/C++",
+        "Go",
+        "Rust",
+        "Python",
+        "GStreamer"
+      ],
+      "name": "Languages"
+    },
+    {
+      "keywords": [
+        "AWS, EC2, Lambda, Fargate, Docker",
+        "Server side rendering",
+        "Postgres, SQLite, NoSQL, redis"
+      ],
+      "name": "Backend"
+    },
+    {
+      "keywords": [
+        "React Native, Expo, Vite, Webpack, Flutter",
+        "Angular, React, Redux",
+        "Native executables"
+      ],
+      "name": "Frontend"
+    }
+  ],
+  "projects": [
+    {
+      "url": "",
+      "keywords": [
+        null
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "summary": "Comfortable embracing many roles including product design and project management",
+      "title": "Seattle based senior full stack engineer in native and web applications"
+    }
+  ],
+  "sections": [
+    "templates",
+    "profile",
+    "awards",
+    "work",
+    "skills",
+    "education",
+    "projects"
+  ]
+}

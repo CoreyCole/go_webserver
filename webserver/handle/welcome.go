@@ -1,6 +1,7 @@
 package handle
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 
@@ -34,10 +35,15 @@ func GetWelcome(c echo.Context) error {
 			"Error rendering markdown to html: "+err.Error(),
 		)
 	}
-
-	// Use the Page templ component to construct the full page HTML
-	mdComponent := lib.HTMLToComponent(mdHTML)
-	view := vi.WelcomePage(mdComponent)
+	resumeHTML, err := lib.ResumeJSONToHTML("www/resume.json")
+	if err != nil {
+		return echo.NewHTTPError(
+			http.StatusInternalServerError,
+			"Error rendering resume to html: "+err.Error(),
+		)
+	}
+	welcomeContent := lib.HTMLToComponent(fmt.Sprintf("%s%s", mdHTML, resumeHTML))
+	view := vi.WelcomePage(welcomeContent)
 
 	if err := view.Render(c.Request().Context(), c.Response().Writer); err != nil {
 		return echo.NewHTTPError(

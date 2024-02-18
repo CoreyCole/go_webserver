@@ -128,33 +128,22 @@ func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter)
 				return ast.GoToNext, true
 			}
 			if heading, ok := node.(*ast.Heading); ok {
-				fontSize := ""
-				switch heading.Level {
-				case 1:
-					fontSize = "text-5xl"
-				case 2:
-					fontSize = "text-4xl"
-				case 3:
-					fontSize = "text-3xl"
-				case 4:
-					fontSize = "text-2xl"
-				case 5:
-					fontSize = "text-xl"
-				case 6:
-					fontSize = "text-lg"
-				}
-				attr := heading.Attribute
-				if attr == nil {
-					attr = &ast.Attribute{}
-				}
-				attr.Classes = append(
-					attr.Classes,
-					[]byte(fmt.Sprintf(
-						"%s my-4 font-bold leading-7 text-green-900",
-						fontSize,
-					)),
+				headingClass := fmt.Sprintf(
+					"myh myh-%d",
+					min(heading.Level, 6), // max supported level is 6
 				)
-				heading.Attribute = attr
+
+				if headingClass != "" {
+					attr := heading.Attribute
+					if attr == nil {
+						attr = &ast.Attribute{}
+					}
+					attr.Classes = append(
+						attr.Classes,
+						[]byte(headingClass),
+					)
+					heading.Attribute = attr
+				}
 			}
 			if list, ok := node.(*ast.List); ok {
 				listClass := "list-disc"
