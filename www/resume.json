@@ -29,14 +29,14 @@
   "work": [
     {
       "highlights": [
+        "Built real-time (<200ms) audio signal processing system to synchronize and echo-cancel in C/Rust",
+        "Built hardware integration for 6 figure corporate contract with Hewlet Packard (HP) in C/GStreamer",
         "Built mobile voice app (Ciremi) that creates contacts with notes in React Native Expo using GPT4 api",
         "Built full stack apps for 1000s of users in Typescript/React Native/AWS Lambda/Fargate/EC2",
-        "Mentored junior developers and interns",
         "Reversed technical debt through codebase cleanups resulting in improved engineer productivity",
         "Organized and managed team tasks with Github/Google Sheets/Slack automation/Jira/Trello",
         "Quantized machine learning model for real-time audio signal inference on Android",
-        "Built hardware integration for 6 figure corporate contract with Hewlet Packard (HP) in C/GStreamer",
-        "Built real-time (<200ms) audio signal processing system to synchronize and echo-cancel in C/Rust"
+        "Mentored junior developers and interns"
       ],
       "position": "Kernel Labs",
       "location": "Seattle, WA",
@@ -101,12 +101,12 @@
     {
       "level": "",
       "keywords": [
+        "Python",
         "Typescript",
         "SQL",
         "C/C++",
         "Go",
         "Rust",
-        "Python",
         "GStreamer"
       ],
       "name": "Languages"
