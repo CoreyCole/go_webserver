@@ -152,7 +152,7 @@ func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter)
 				}
 				if entering {
 					// Start of the list
-					fmt.Fprintf(w, `<ul class="%s">`, listClass)
+					fmt.Fprintf(w, `<ul class="%s ml-6">`, listClass)
 				} else {
 					// End of the list
 					fmt.Fprintf(w, "</ul>")
@@ -166,7 +166,7 @@ func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter)
 				}
 				attr.Classes = append(attr.Classes, []byte("text-lg"))
 				if entering {
-					w.Write([]byte(`<li>`))
+					w.Write([]byte(`<li class="text-lg">`))
 				} else {
 					w.Write([]byte("</li>"))
 				}
