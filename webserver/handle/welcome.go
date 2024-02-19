@@ -42,7 +42,7 @@ func GetWelcome(c echo.Context) error {
 			"Error rendering resume to html: "+err.Error(),
 		)
 	}
-	welcomeContent := lib.HTMLToComponent(fmt.Sprintf("%s%s", mdHTML, resumeHTML))
+	welcomeContent := lib.HTMLToComponent(fmt.Sprintf("%s\n%s", mdHTML, resumeHTML))
 	view := vi.WelcomePage(welcomeContent)
 
 	if err := view.Render(c.Request().Context(), c.Response().Writer); err != nil {

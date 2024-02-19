@@ -136,5 +136,5 @@ func ResumeJSONToHTML(path string) (string, error) {
 
 	htmlSlice = append(htmlSlice, "</div>")
 
-	return strings.Join(htmlSlice, ""), nil
+	return strings.Join(htmlSlice, "\n"), nil
 }
