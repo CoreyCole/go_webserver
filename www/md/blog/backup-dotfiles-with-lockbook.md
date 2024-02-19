@@ -1,6 +1,6 @@
 # Backup dotfiles with lockbook on macos
-Lockbook is a blazingly fast encrypted note taking application [written in rust](https://github.com/lockbook/lockbook).
-We can store highly-compressed text files in lockbook's cloud on the free tier.
+Lockbook is a blazingly fast note taking application [written in rust](https://github.com/lockbook/lockbook).
+We can store compressed and encrypted text files in lockbook's cloud on the free tier.
 Lockbook's CLI supports automatic file syncronization similar to Google Drive.
 
 In this post, I'll show how I back up my [nvchad](https://nvchad.com/) custom config ([docs](https://nvchad.com/docs/config/walkthrough)). This symlink strategy can be used to backup any configs or other text data automatically.
