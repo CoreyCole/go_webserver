@@ -6,7 +6,7 @@ Lockbook's CLI supports automatic file syncronization similar to Google Drive.
 In this post, I'll show how I back up my [nvchad](https://nvchad.com/) custom config ([docs](https://nvchad.com/docs/config/walkthrough)). This symlink strategy can be used to backup any configs or other text data automatically.
 
 ### Setting up the `lockbook` CLI
-First install `lockbook` version >= `0.8.5`
+First install `lockbook` version >= `0.9.0`
 ```bash
 brew tap lockbook/lockbook && brew install lockbook
 ```
@@ -43,11 +43,11 @@ cp -r ~/.config/nvim/lua/custom ~/.config/nvim/lua/custom_backup
 ### Copy dotfiles to `/tmp/lockbook`
 ```bash
 mkdir /tmp/lockbook/dotfiles
-cp -r ~/.config/nvim/lua/custom/ /tmp/lockbook/nvchad-config
+cp -r ~/.config/nvim/lua/custom/ /tmp/lockbook/dotfiles/nvchad-config
 ```
 ### Create the symlink
 ```bash
-ln -s /tmp/lockbook/nvchad-config ~/.config/nvim/lua/custom
+ln -s /tmp/lockbook/dotfiles/nvchad-config ~/.config/nvim/lua/custom
 ```
 ### Verify the symlink
 ```bash
