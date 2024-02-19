@@ -31,7 +31,7 @@
       "highlights": [
         "Built real-time (<200ms) audio signal processing system to synchronize and echo-cancel in C/Rust",
         "Built hardware integration for 6 figure corporate contract with Hewlet Packard (HP) in C/GStreamer",
-        "Built mobile voice app (Ciremi) that creates contacts with notes in React Native Expo using GPT4 api",
+        "Built contacts with notes voice assistant app (Ciremi) in React Native Expo using GPT4 api & LLMs",
         "Built full stack apps for 1000s of users in Typescript/React Native/AWS Lambda/Fargate/EC2",
         "Reversed technical debt through codebase cleanups resulting in improved engineer productivity",
         "Organized and managed team tasks with Github/Google Sheets/Slack automation/Jira/Trello",
