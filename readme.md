@@ -1,20 +1,20 @@
 # go markdown webserver with code highlighting
-- Add markdown files to the `www/md/` directory.
+- Add markdown files to the `static/md/` directory.
 - Demo at [coreycc.com](https://coreycc.com/md/test.md)
+
+Install dependencies.
+```
+make install
+```
 
 Run the server. 
 ```bash
-go run main.go
+make run
 ```
 
-Watch & generate [templ template](https://templ.guide/quick-start/installation) views
-```bash
-templ generate --watch
+Watch for local file changes.
 ```
-
-Hot reload local dev server with air
-```bash
-air
+make watch
 ```
 
 Run all Tests

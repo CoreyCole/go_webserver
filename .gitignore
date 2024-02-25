@@ -1,4 +1,4 @@
-tmp/
+.tmp/
 !bin/.gitkeep
 bin/
 !log/.gitkeep

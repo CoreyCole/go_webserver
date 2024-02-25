@@ -16,7 +16,7 @@ import (
 
 func GetGame(c echo.Context) error {
 	gameName := c.Param("gameName")
-	baseDir := "www/games"
+	baseDir := "static/games"
 	exactMatch, err := os.Stat(filepath.Join(baseDir, gameName))
 	if err == nil && exactMatch.IsDir() {
 		fmt.Printf("exact match\n")

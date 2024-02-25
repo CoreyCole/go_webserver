@@ -13,7 +13,7 @@ import (
 func GetMarkdownFile(c echo.Context) error {
 	filename := c.Param("filename")
 	style := c.QueryParam("style")
-	md, err := os.ReadFile("www/md/" + filename)
+	md, err := os.ReadFile("static/md/" + filename)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "File not found")
 	}

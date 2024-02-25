@@ -32,18 +32,18 @@
 [this is a link]("/md/test.md")
 
 
-code block in go:
+`golang` highlight:
 ```go
 var n = nil
 if err != nil {
     fmt.Printf("%s", err)
 }
 ```
-great code up there what about `sql`?
+`sql` highlight:
 ```sql
 SELECT id, * FROM TABLE WHERE id=id
 ```
-and a longer `python` example?
+`python` highlight:
 ```python
 from typing import List
 

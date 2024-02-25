@@ -13,7 +13,7 @@ import (
 
 const (
 	style     = "monokai"
-	welcomeMd = "www/md/welcome.md"
+	welcomeMd = "static/md/welcome.md"
 )
 
 func GetWelcome(c echo.Context) error {
@@ -35,7 +35,7 @@ func GetWelcome(c echo.Context) error {
 			"Error rendering markdown to html: "+err.Error(),
 		)
 	}
-	resumeHTML, err := lib.ResumeJSONToHTML("www/resume.json")
+	resumeHTML, err := lib.ResumeJSONToHTML("static/resume.json")
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError,

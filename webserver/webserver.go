@@ -29,7 +29,7 @@ func Start(port string) error {
 	// serve static files as a fallback (after all handlers)
 	// game assets loaded with paths e.g.
 	// http://localhost:3000/games/giga_platformer-97832db24b9e2bb6/assets/*
-	e.Static("/", "www/")
+	e.Static("/", "static/")
 
 	fmt.Println("starting on port", port)
 	err := e.Start(port)
