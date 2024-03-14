@@ -5,7 +5,7 @@ replace github.com/coreycole/go_webserver => ./
 go 1.21.6
 
 require (
-	github.com/a-h/templ v0.2.543
+	github.com/a-h/templ v0.2.598
 	github.com/alecthomas/chroma v0.10.0
 	github.com/gomarkdown/markdown v0.0.0-20231222211730-1d6d20845b47
 	github.com/labstack/echo/v4 v4.11.4
