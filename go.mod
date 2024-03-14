@@ -8,7 +8,6 @@ require (
 	github.com/a-h/templ v0.2.543
 	github.com/alecthomas/chroma v0.10.0
 	github.com/gomarkdown/markdown v0.0.0-20231222211730-1d6d20845b47
-	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/rs/zerolog v1.31.0
 	github.com/stretchr/testify v1.8.4
