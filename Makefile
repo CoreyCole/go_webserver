@@ -14,6 +14,7 @@ install:
 	@npm install -D daisyui@latest
 
 build:
+	@npm run build
 	@npx tailwindcss -i static/index.css -o static/build.css 
 	@templ generate view
 	@go build -o bin/go_webserver main.go 

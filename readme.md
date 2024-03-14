@@ -29,7 +29,7 @@ go build -o bin/go_webserver main.go
 
 Systemd setup
 ```bash
-# copy systemd config
+# copy systemd config (assumes pwd /home/ubuntu/go_webserver)
 cp go_webserver.service /etc/systemd/system/go_webserver.service
 
 # activate service
