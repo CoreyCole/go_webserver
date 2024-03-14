@@ -29,14 +29,15 @@
   "work": [
     {
       "highlights": [
-        "Built real-time (<200ms) audio signal processing system to synchronize and echo-cancel in C/Rust",
+        "Built real-time (<60ms) audio signal processing system to synchronize and echo-cancel in C/Rust",
         "Built hardware integration for 6 figure corporate contract with Hewlet Packard (HP) in C/GStreamer",
-        "Built contacts with notes voice assistant app (Ciremi) in React Native Expo using GPT4 api & LLMs",
+        "Built contacts+notes voice assistant app (Ciremi) in React Native Expo using GPT4 LLM openai api",
         "Built full stack apps for 1000s of users in Typescript/React Native/AWS Lambda/Fargate/EC2",
-        "Reversed technical debt through codebase cleanups resulting in improved engineer productivity",
-        "Organized and managed team tasks with Github/Google Sheets/Slack automation/Jira/Trello",
+        "Streamlined team efficiency with Jira, Trello, Github, Google Sheets, and Slack automation",
         "Quantized machine learning model for real-time audio signal inference on Android",
-        "Mentored junior developers and interns to craft work streams and guide development planning"
+        "Mentored junior developers and interns to craft work streams and guide development planning",
+        "Conducted code reviews with thoughtful questions, feedback and suggestions",
+        "Enhanced engineer productivity by reafactoring the codebase and eliminating technical debt"
       ],
       "position": "Kernel Labs",
       "location": "Seattle, WA",
@@ -47,30 +48,17 @@
     {
       "highlights": [
         "Built Alexa & Google Home voice social network (like Houseparty) using Typescript/Python/AWS",
-        "Built mobile app for \"Remote Reading\" through audio files using Android/iOS/Flutter/Firebase/AWS",
-        "Built game (like Cards Against Humanity) with in-house voice synthesis ML model",
+        null,
+        null,
         "Built Chrome Extension for de-noising audio with in-house ML model using JavaScript and Python",
         "Built a CICD pipeline using git webhooks, Docker, and Codeship",
-        "Built an internal tool for browsing user analytics, logs and errors"
+        "Developed an internal analytics, logs, and error browsing tool, improving team efficiency by streamlining access to critical data."
       ],
       "company": "Software Engineer, Cofounder of Halloo (Alexa/Google Home app)",
       "location": "Seattle, WA",
       "startDate": "Apr 2018",
       "endDate": "Jan 2020",
       "position": "Kernel Labs"
-    },
-    {
-      "highlights": [
-        "Built best-in-conference demo for VLDB 2018 and demo'd at ACM SIGMOD 2018",
-        "Developed a SQL-based framework for drawing causal inference using Python and Postgres",
-        "Leveraged SQL to scale coarsened exact matching past current tools",
-        "Visualized and fixed bias in OLAP queries using Angular and Typescript"
-      ],
-      "company": "Research Demo Builder for Dan Suciu",
-      "location": "Seattle, WA",
-      "startDate": "Sep 2015",
-      "endDate": "May 2018",
-      "position": "University of Washington CSE"
     },
     {
       "highlights": [
@@ -85,6 +73,19 @@
       "location": "Seattle, WA",
       "company": "Software Engineer, Cofounder",
       "position": "BellHapp Inc"
+    },
+    {
+      "highlights": [
+        "Built best-in-conference demo for VLDB 2018 and demo'd at ACM SIGMOD 2018",
+        "Developed a SQL-based framework for drawing causal inference using Python and Postgres",
+        "Leveraged SQL to scale coarsened exact matching past in-memory tools (R)",
+        "Visualized and fixed bias in OLAP queries using Angular and Typescript"
+      ],
+      "company": "Research Demo Builder for Dan Suciu",
+      "location": "Seattle, WA",
+      "startDate": "Sep 2015",
+      "endDate": "May 2018",
+      "position": "University of Washington CSE"
     },
     {
       "highlights": [
@@ -121,9 +122,9 @@
     },
     {
       "keywords": [
-        "React Native, Expo, Vite, Webpack, Flutter",
-        "Angular, React, Redux",
-        "Native executables"
+        "React Native, Expo, Flutter, SwiftUI, Jetpack Compose",
+        "Angular, React, Redux, Vite, Webpack",
+        "Native executables, CLIs"
       ],
       "name": "Frontend"
     }
@@ -139,7 +140,7 @@
   "awards": [
     {
       "summary": "Comfortable embracing many roles including product design and project management",
-      "title": "Seattle based senior full stack engineer in native and web applications"
+      "title": "Senior Software Engineer in native and full stack web applications (in Seattle)"
     }
   ],
   "sections": [
@@ -147,8 +148,8 @@
     "profile",
     "awards",
     "work",
+    "projects",
     "skills",
-    "education",
-    "projects"
+    "education"
   ]
 }
