@@ -48,8 +48,6 @@
     {
       "highlights": [
         "Built Alexa & Google Home voice social network (like Houseparty) using Typescript/Python/AWS",
-        null,
-        null,
         "Built Chrome Extension for de-noising audio with in-house ML model using JavaScript and Python",
         "Built a CICD pipeline using git webhooks, Docker, and Codeship",
         "Developed an internal analytics, logs, and error browsing tool, improving team efficiency by streamlining access to critical data."
