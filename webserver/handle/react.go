@@ -5,7 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	vi "github.com/coreycole/go_webserver/webserver/views"
+	vi "github.com/coreycole/go_webserver/webserver/view"
 )
 
 func GetReact(c echo.Context) error {

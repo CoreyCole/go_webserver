@@ -11,12 +11,12 @@ import (
 	"github.com/labstack/echo/v4"
 
 	lib "github.com/coreycole/go_webserver/webserver/lib"
-	vi "github.com/coreycole/go_webserver/webserver/views"
+	vi "github.com/coreycole/go_webserver/webserver/view"
 )
 
 func GetGame(c echo.Context) error {
 	gameName := c.Param("gameName")
-	baseDir := "static/games"
+	baseDir := "public/games"
 	exactMatch, err := os.Stat(filepath.Join(baseDir, gameName))
 	if err == nil && exactMatch.IsDir() {
 		fmt.Printf("exact match\n")

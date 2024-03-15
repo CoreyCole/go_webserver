@@ -7,13 +7,13 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	lib "github.com/coreycole/go_webserver/webserver/lib"
-	vi "github.com/coreycole/go_webserver/webserver/views"
+	"github.com/coreycole/go_webserver/webserver/lib"
+	vi "github.com/coreycole/go_webserver/webserver/view"
 )
 
 const (
 	style     = "monokai"
-	welcomeMd = "static/md/welcome.md"
+	welcomeMd = "public/md/welcome.md"
 )
 
 func GetWelcome(c echo.Context) error {
@@ -35,7 +35,7 @@ func GetWelcome(c echo.Context) error {
 			"Error rendering markdown to html: "+err.Error(),
 		)
 	}
-	resumeHTML, err := lib.ResumeJSONToHTML("static/resume.json")
+	resumeHTML, err := lib.ResumeJSONToHTML("public/resume.json")
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError,

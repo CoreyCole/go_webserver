@@ -1,3 +1,9 @@
+build:
+	@npx tailwindcss -i webserver/view/css/index.css -o public/build.css
+	@templ generate view
+	@go build -o bin/go_webserver main.go
+	@node esbuild.js
+
 watch:
 	air
 
@@ -5,19 +11,14 @@ run: build
 	@./bin/go_webserver
 
 install:
+	@go install github.com/cosmtrek/air@latest
 	@go install github.com/a-h/templ/cmd/templ@latest
 	@go get ./...
-	@go mod vendor
 	@go mod tidy
 	@go mod download
-	@npm install -D tailwindcss
-	@npm install -D daisyui@latest
+	@npm install -g pnpm@latest
+	@pnpm install
 
-build:
-	@npm run build
-	@npx tailwindcss -i static/index.css -o static/build.css 
-	@templ generate view
-	@go build -o bin/go_webserver main.go 
 
 up: ## Database migration up
 	@go run cmd/migrate/main.go up

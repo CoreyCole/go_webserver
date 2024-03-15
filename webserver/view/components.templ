@@ -1,4 +1,24 @@
-package views
+package view
+
+templ WelcomePage(content templ.Component) {
+  <!DOCTYPE html>
+  <html class="max-w-4xl mx-auto m-0 h-full bg-black">
+  <head>
+    <title>Corey Cole Web Server</title>
+    <link rel="stylesheet" type="text/css" href="/build.css" />
+    <link rel="stylesheet" type="text/css" href="/index.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+    <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="/react/components/dropdown.js"></script>
+  </head>
+  <body class="dark m-0 h-full">
+    <div class="p-4 m-0 h-full bg-black text-slate-300">
+      @content
+    </div>
+  </body>
+  </html>
+}
 
 templ ReactPage() {
   <!DOCTYPE html>
@@ -14,25 +34,8 @@ templ ReactPage() {
     </head>
     <body>
       <div id="application"></div>
-      <script src="/react-app.js"></script>
+      <script src="/react/main.js"></script>
     </body>
-  </html>
-}
-
-templ WelcomePage(content templ.Component) {
-  <!DOCTYPE html>
-  <html class="max-w-4xl mx-auto m-0 h-full bg-black">
-  <head>
-    <title>Corey Cole's Web Server</title>
-    <link rel="stylesheet" type="text/css" href="/build.css" />
-    <link rel="stylesheet" type="text/css" href="/index.css" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
-  </head>
-  <body class="dark m-0 h-full">
-    <div class="p-4 m-0 h-full bg-black text-slate-300">
-      @content
-    </div>
-  </body>
   </html>
 }
 
@@ -55,14 +58,15 @@ templ MarkdownPage(content templ.Component) {
 
 templ BevyPage(js string, wasm string, loadscript templ.Component) {
   <!DOCTYPE html>
-  <html><head>
-  <link rel="preload" 
-   href={ wasm } 
-   as="fetch"
-   type="application/wasm"
-   crossorigin="" />
-  <link rel="modulepreload"
-   href={ js } />
+  <html>
+  <head>
+    <link rel="preload"
+      href={ wasm }
+      as="fetch"
+      type="application/wasm"
+      crossorigin="" />
+    <link rel="modulepreload"
+      href={ js } />
   </head>
   <style type="text/css">
   html, body {
@@ -74,4 +78,4 @@ templ BevyPage(js string, wasm string, loadscript templ.Component) {
   @loadscript
   </body>
   </html>
- }
+}

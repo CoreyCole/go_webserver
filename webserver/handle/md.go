@@ -7,13 +7,13 @@ import (
 	"github.com/labstack/echo/v4"
 
 	lib "github.com/coreycole/go_webserver/webserver/lib"
-	vi "github.com/coreycole/go_webserver/webserver/views"
+	vi "github.com/coreycole/go_webserver/webserver/view"
 )
 
 func GetMarkdownFile(c echo.Context) error {
 	filename := c.Param("filename")
 	style := c.QueryParam("style")
-	md, err := os.ReadFile("static/md/" + filename)
+	md, err := os.ReadFile("public/md/" + filename)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "File not found")
 	}

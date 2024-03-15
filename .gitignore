@@ -1,11 +1,11 @@
-.tmp/
 !bin/.gitkeep
 bin/
 !log/.gitkeep
+.tmp/
 log/
 .DS_Store
 *_templ.go*
 node_modules/
 vendor/
 .env
-static/react-app.js
+public/react/**/*.js
