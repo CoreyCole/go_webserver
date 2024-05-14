@@ -1,27 +1,23 @@
-import React, { useState } from "react"
+import React, { useCallback, useState } from "react"
 
-interface Link {
-  href: string
-  title: string
-}
-
-interface DropdownProps {
-  links: Link[]
-}
-
-const Dropdown: React.FC<DropdownProps> = ({ links }) => {
+export const Dropdown = ({
+  links,
+  titles,
+}: {
+  links: string[]
+  titles: string[]
+}) => {
   const [isOpen, setIsOpen] = useState(false)
-
-  const toggleDropdown = () => setIsOpen(!isOpen)
+  const toggleDropdown = useCallback(() => setIsOpen((isOpen) => !isOpen), [])
 
   return (
     <div>
-      <button onClick={toggleDropdown}>Links</button>
+      <button onClick={toggleDropdown}>Dropdown</button>
       {isOpen && (
         <ul>
-          {links.map((link, index) => (
-            <li key={index}>
-              <a href={link.href}>{link.title}</a>
+          {links.map((link, i) => (
+            <li key={i}>
+              <a href={link}>{titles[i]}</a>
             </li>
           ))}
         </ul>
@@ -29,5 +25,3 @@ const Dropdown: React.FC<DropdownProps> = ({ links }) => {
     </div>
   )
 }
-
-export default Dropdown

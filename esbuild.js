@@ -11,19 +11,11 @@ async function build() {
   try {
     await esbuild.build({
       entryPoints: ["react/main.tsx"],
+      globalName: "bundle",
       outdir: outdir,
-      bundle: false,
+      bundle: true,
       minify: false,
       plugins: [],
-    })
-    await esbuild.build({
-      entryPoints: ["react/components/dropdown.tsx"],
-      outdir: `${outdir}/components`,
-      bundle: false,
-      minify: false,
-      plugins: [],
-      jsxFactory: "React.createElement",
-      jsxFragment: "React.Fragment",
     })
     const endTime = performance.now()
     const duration = (endTime - startTime).toFixed(2)

@@ -1,15 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import About from "./pages/About";
-import Home from "./pages/Home";
+import { createRoot } from "react-dom/client"
+import { Dropdown } from "./components/dropdown"
 
-const root = ReactDOM.createRoot(document.querySelector("#application")!);
-root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/react" element={<Home />} />
-      <Route path="/react/about" element={<About />} />
-    </Routes>
-  </BrowserRouter>
-);
+export function renderDropdown(links: string[], titles: string[]) {
+  const dropdownRoot = document.getElementById("dropdown-root")
+  if (!dropdownRoot) {
+    throw new Error("Could not find dropdown root element")
+  }
+  const reactRoot = createRoot(dropdownRoot)
+  reactRoot.render(Dropdown({ links, titles }))
+}

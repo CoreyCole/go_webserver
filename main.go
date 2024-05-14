@@ -5,5 +5,8 @@ import (
 )
 
 func main() {
-	webserver.Start(":3000")
+	err := webserver.Start(":3030")
+	if err != nil {
+		panic(err)
+	}
 }

@@ -17,18 +17,7 @@ func Start(port string) error {
 	e.Use(middleware.Recover())
 	e.Use(m.ZeroLog())
 
-	// Routes
-	e.GET("/", h.GetWelcome)
-	e.GET("/health", h.GetHealth)
-	// render markcown
-	e.GET("/md/:filename", h.GetMarkdownFile)
-	// game index pages e.g.
-	// http://localhost:3000/games/giga_platformer/game
-	e.GET("/games/:gameName/game", h.GetGame)
-
-	// serve static files as a fallback (after all handlers)
-	// game assets loaded with paths e.g.
-	// http://localhost:3000/games/giga_platformer-97832db24b9e2bb6/assets/*
+	e.GET("/", h.GetReact)
 	e.Static("/", "public/")
 
 	fmt.Println("starting on port", port)
