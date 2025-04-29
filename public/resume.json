@@ -1,11 +1,11 @@
 {
   "selectedTemplate": 1,
   "headings": {
-    "education": "Education",
+    "awards": "Profile",
     "projects": "",
     "skills": "Skills, Tools & Experience",
     "work": "Work Experience",
-    "awards": "Profile"
+    "education": "Education"
   },
   "basics": {
     "name": "Corey Cole",
@@ -130,13 +130,13 @@
     },
     {
       "keywords": [
-        "React, Tanstack Query, Connect-es, Tailwind, React-Hook-Form, Zod, Next, Turborepo, Figma, Shadcn"
+        "React, Next, Tanstack Query, Connect-es, Tailwind, React-Hook-Form, Zod, Shadcn"
       ],
       "name": "Frontend"
     },
     {
       "keywords": [
-        "Neovim, Supermaven, Cursor, GitHub Actions, Just, Native executables, CLIs, Postman"
+        "Neovim, Supermaven, Cursor, GitHub Actions, Just, Turborepo, CLIs, Postman, Figma"
       ],
       "name": "Tools"
     }
@@ -160,8 +160,8 @@
     "profile",
     "awards",
     "work",
-    "projects",
     "skills",
+    "projects",
     "education"
   ]
 }
