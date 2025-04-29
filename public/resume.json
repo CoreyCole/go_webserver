@@ -29,7 +29,7 @@
   "work": [
     {
       "highlights": [
-        "Built in golang, postgres, SQLc, temporal, react, next, connect-es, tanstack query and tailwind",
+        "Used golang, postgres, SQLc, temporal, react, next, connect-es, tanstack query, zod, RHF and tailwind",
         "Closely collaborated and iterated with design and product via Figma to build delightful UIs",
         "Crafted and reviewed technical specifications both for new features and refactors for existing features",
         "Practiced independent agency: fixed quick-win issues I discovered alongside the main task at hand",
@@ -131,10 +131,15 @@
     },
     {
       "keywords": [
-        "React, Tanstack Query, Connect-es, Tailwind, Next, Turborepo",
-        "Native executables, CLIs"
+        "React, Tanstack Query, Connect-es, Tailwind, React-Hook-Form, Zod, Next, Turborepo, Figma, Shadcn"
       ],
       "name": "Frontend"
+    },
+    {
+      "keywords": [
+        "Neovim, Supermaven, Cursor, GitHub Actions, Just, Native executables, CLIs, Postman"
+      ],
+      "name": "Tools"
     }
   ],
   "projects": [
