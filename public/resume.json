@@ -50,7 +50,7 @@
         "Built contacts+notes voice assistant app (Ciremi) in React Native Expo using GPT4 LLM openai api",
         "Built full stack apps for 1000s of users in Typescript/React Native/AWS Lambda/Fargate/EC2",
         "Quantized machine learning model for real-time audio signal inference on Android",
-        "Mentored junior developers and enhanced engineer productivity by simplifying codebase"
+        "Mentored junior developers and enhanced engineer productivity by simplifying codebases"
       ],
       "position": "Kernel Labs",
       "location": "Seattle, WA",
@@ -62,7 +62,7 @@
       "highlights": [
         "Built Alexa & Google Home voice social network (like Houseparty) using Typescript/Python/AWS",
         "Built Chrome Extension for de-noising audio with in-house ML model using JavaScript and Python",
-        "Developed an internal analytics, logs, and error browsing tool to streamline access to critical data."
+        "Developed an internal analytics, logs, and error browsing tool to streamline access to critical data"
       ],
       "company": "Software Engineer, Cofounder of Halloo (Alexa/Google Home app)",
       "location": "Seattle, WA",
