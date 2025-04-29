@@ -1,5 +1,3 @@
-/*eslint-env node*/
-
 /**
  * @type {import("prettier").Config}
  */

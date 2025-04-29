@@ -1,5 +1,3 @@
-/*eslint-env node*/
-
 /**
  * @type {import("eslint").Linter.Config}
  */
@@ -7,6 +5,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    node: true,
   },
   extends: [
     "eslint:recommended",
@@ -16,10 +15,7 @@ module.exports = {
   ],
   overrides: [
     {
-      env: {
-        node: true,
-      },
-      files: [".eslintrc.{js,cjs}"],
+      files: ["**/*.{ts,tsx,js,jsx}"],
       parserOptions: {
         sourceType: "script",
       },

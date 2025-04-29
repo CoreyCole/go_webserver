@@ -1,17 +1,7 @@
 import React, { useState } from "react"
 
-interface Link {
-  href: string
-  title: string
-}
-
-interface DropdownProps {
-  links: Link[]
-}
-
-const Dropdown: React.FC<DropdownProps> = ({ links }) => {
+export const Dropdown = (links: string[], titles: string[]) => {
   const [isOpen, setIsOpen] = useState(false)
-
   const toggleDropdown = () => setIsOpen(!isOpen)
 
   return (
@@ -21,13 +11,19 @@ const Dropdown: React.FC<DropdownProps> = ({ links }) => {
         <ul>
           {links.map((link, index) => (
             <li key={index}>
-              <a href={link.href}>{link.title}</a>
+              <a href={link}>{titles[index]}</a>
             </li>
           ))}
         </ul>
       )}
     </div>
+    // <div>
+    //   {links.map((link, index) => (
+    //     <div key={index}>
+    //       <a href={link}>{titles[index]}</a>
+    //       <br />
+    //     </div>
+    //   ))}
+    // </div>
   )
 }
-
-export default Dropdown

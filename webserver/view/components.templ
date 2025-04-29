@@ -1,81 +1,53 @@
 package view
 
+import (
+	"github.com/coreycole/go_webserver/webserver/view/layout"
+)
+
+var links = []string{"/", "/about", "/contact"}
+var titles = []string{"Home", "About", "Contact"}
+
 templ WelcomePage(content templ.Component) {
-  <!DOCTYPE html>
-  <html class="max-w-4xl mx-auto m-0 h-full bg-black">
-  <head>
-    <title>Corey Cole Web Server</title>
-    <link rel="stylesheet" type="text/css" href="/build.css" />
-    <link rel="stylesheet" type="text/css" href="/index.css" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
-    <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-    <script src="/react/components/dropdown.js"></script>
-  </head>
-  <body class="dark m-0 h-full">
-    <div class="p-4 m-0 h-full bg-black text-slate-300">
-      @content
-    </div>
-  </body>
-  </html>
+	@layout.Default("Corey Cole Web Server") {
+		<script src="/react/index.js"></script>
+		<div id="react-dropdown"></div>
+		@renderDropdownReact(links, titles)
+		<div class="p-4 max-w-4xl mx-auto">
+			@content
+		</div>
+	}
 }
 
-templ ReactPage() {
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>React App</title>
-      <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
-      <link rel="stylesheet" type="text/css" href="/build.css" />
-      <link rel="stylesheet" type="text/css" href="/index.css" />
-    </head>
-    <body>
-      <div id="application"></div>
-      <script src="/react/main.js"></script>
-    </body>
-  </html>
+// Use the renderDropdown function from the React bundle.
+
+script renderDropdownReact(links []string, titles []string) {
+bundle.renderDropdown(links, titles)
 }
 
 templ MarkdownPage(content templ.Component) {
-  <!DOCTYPE html>
-  <html class="m-0 h-full bg-black">
-  <head>
-    <title>Markdown Viewer</title>
-    <link rel="stylesheet" type="text/css" href="/build.css" />
-    <link rel="stylesheet" type="text/css" href="/index.css" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
-  </head>
-  <body class="dark m-0 h-full">
-    <div class="p-4 m-0 h-full bg-black text-slate-300">
-      @content
-    </div>
-  </body>
-  </html>
+	@layout.Default("Markdown Viewer") {
+		<div class="p-4 bg-black">
+			@content
+		</div>
+	}
 }
 
 templ BevyPage(js string, wasm string, loadscript templ.Component) {
-  <!DOCTYPE html>
-  <html>
-  <head>
-    <link rel="preload"
-      href={ wasm }
-      as="fetch"
-      type="application/wasm"
-      crossorigin="" />
-    <link rel="modulepreload"
-      href={ js } />
-  </head>
-  <style type="text/css">
-  html, body {
-     margin: 0;
-     height: 100%;
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<link rel="preload" href={ wasm } as="fetch" type="application/wasm" crossorigin=""/>
+			<link rel="modulepreload" href={ js }/>
+		</head>
+		<style type="text/css">
+  html,
+  body {
+    margin: 0;
+    height: 100%;
   }
-  </style>
-  <body>
-  @loadscript
-  </body>
-  </html>
+</style>
+		<body>
+			@loadscript
+		</body>
+	</html>
 }
