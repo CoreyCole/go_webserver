@@ -29,15 +29,28 @@
   "work": [
     {
       "highlights": [
+        "Built full stack features in Golang, Postgres and React using next, connect-es, tanstack query and SQLc",
+        "Closely collaborated and iterated with design and product to build delightful UI and animations",
+        "Crafted and reviewed technical specifications both for new features and refactors for existing features",
+        "Practiced independent agency: fixed quick-win issues I discovered alongside the main task at hand",
+        "Built and iterated on GitHub Actions CI/CD and local development tools for engineering efficiency",
+        "Leveraged LLM tools to quickly understand, extend and document code",
+        "Conducted code reviews with thoughtful questions, feedback and suggestions"
+      ],
+      "position": "Founding Engineer",
+      "company": "Chestnut",
+      "location": "Seattle, WA",
+      "startDate": "April 2024",
+      "endDate": "Present"
+    },
+    {
+      "highlights": [
         "Built real-time (<60ms) audio signal processing system to synchronize and echo-cancel in C/Rust",
         "Built hardware integration for 6 figure corporate contract with Hewlet Packard (HP) in C/GStreamer",
         "Built contacts+notes voice assistant app (Ciremi) in React Native Expo using GPT4 LLM openai api",
         "Built full stack apps for 1000s of users in Typescript/React Native/AWS Lambda/Fargate/EC2",
-        "Streamlined team efficiency with Jira, Trello, Github, Google Sheets, and Slack automation",
         "Quantized machine learning model for real-time audio signal inference on Android",
-        "Mentored junior developers and interns to craft work streams and guide development planning",
-        "Conducted code reviews with thoughtful questions, feedback and suggestions",
-        "Enhanced engineer productivity by reafactoring the codebase and eliminating technical debt"
+        "Mentored junior developers and Enhanced engineer productivity by simplifying codebase"
       ],
       "position": "Kernel Labs",
       "location": "Seattle, WA",
@@ -49,8 +62,7 @@
       "highlights": [
         "Built Alexa & Google Home voice social network (like Houseparty) using Typescript/Python/AWS",
         "Built Chrome Extension for de-noising audio with in-house ML model using JavaScript and Python",
-        "Built a CICD pipeline using git webhooks, Docker, and Codeship",
-        "Developed an internal analytics, logs, and error browsing tool, improving team efficiency by streamlining access to critical data."
+        "Developed an internal analytics, logs, and error browsing tool to streamline access to critical data."
       ],
       "company": "Software Engineer, Cofounder of Halloo (Alexa/Google Home app)",
       "location": "Seattle, WA",
@@ -61,10 +73,8 @@
     {
       "highlights": [
         "Built restaurant mobile web app for the dine-in experience of ordering and real-time staff messaging",
-        "Results correlated with an increase in revenue per customer in restaurant user testing",
         "Built the app from scratch, along with a lean team of 1-2 other engineers",
-        "Led weekly meetings & task organization",
-        "Owned product design and User Experience"
+        "Owned product design and User Experience; led weekly meetings & task organization"
       ],
       "endDate": "May 2018",
       "startDate": "Sep 2015",
@@ -100,11 +110,12 @@
     {
       "level": "",
       "keywords": [
-        "Python",
-        "Typescript",
-        "SQL",
-        "C/C++",
         "Go",
+        "SQL",
+        "Typescript",
+        "Protobuf",
+        "Python",
+        "C/C++",
         "Rust",
         "GStreamer"
       ],
@@ -113,15 +124,15 @@
     {
       "keywords": [
         "AWS, EC2, Lambda, Fargate, Docker",
-        "Server side rendering",
+        "SSR",
         "Postgres, SQLite, NoSQL, redis"
       ],
       "name": "Backend"
     },
     {
       "keywords": [
-        "React Native, Expo, Flutter, SwiftUI, Jetpack Compose",
-        "Angular, React, Redux, Vite, Webpack",
+        "React, Tanstack Query, Connect-es",
+        "Vite, Webpack, Turborepo",
         "Native executables, CLIs"
       ],
       "name": "Frontend"
