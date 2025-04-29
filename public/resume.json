@@ -29,7 +29,7 @@
   "work": [
     {
       "highlights": [
-        "Built in Golang, Postgres and React using next, connect-es, tanstack query, tailwind and SQLc",
+        "Built in golang, postgres, SQLc, temporal, react, next, connect-es, tanstack query and tailwind",
         "Closely collaborated and iterated with design and product to build delightful UI and animations",
         "Crafted and reviewed technical specifications both for new features and refactors for existing features",
         "Practiced independent agency: fixed quick-win issues I discovered alongside the main task at hand",
@@ -123,7 +123,7 @@
     },
     {
       "keywords": [
-        "AWS, EC2, Lambda, Fargate, Docker",
+        "Temporal, AWS, EC2, Lambda, Fargate, Docker",
         "SSR",
         "Postgres, SQLite, NoSQL, redis"
       ],
@@ -131,8 +131,7 @@
     },
     {
       "keywords": [
-        "React, Tanstack Query, Connect-es",
-        "Vite, Webpack, Turborepo",
+        "React, Tanstack Query, Connect-es, Tailwind, Next, Turborepo",
         "Native executables, CLIs"
       ],
       "name": "Frontend"
