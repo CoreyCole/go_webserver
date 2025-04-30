@@ -36,7 +36,7 @@
         "Built and iterated on GitHub Actions CI/CD and local development tools for engineering efficiency",
         "Leveraged LLM tools to quickly understand, extend and document code",
         "Conducted code reviews with thoughtful questions, feedback and suggestions",
-        "Golang, postgres, SQLc, temporal, dagster, python, react, next, connect-es, tanstack query, zod, & RHF"
+        "Golang, temporal, postgres, SQLc, dynamoDB, dagster, python, connect-es, tanstack query, zod, & RHF"
       ],
       "position": "Chestnut",
       "company": "Founding Engineer, Full Stack at a16z backed seed stage startup",
@@ -112,8 +112,8 @@
         "Go",
         "SQL",
         "Typescript",
-        "Protobuf",
         "Python",
+        "Protobuf",
         "C/C++",
         "Rust",
         "GStreamer"
@@ -122,9 +122,9 @@
     },
     {
       "keywords": [
-        "Temporal, AWS, EC2, Lambda, Fargate, Docker",
+        "Temporal, Postgres, DynamoDB, Dagster, AWS, EC2, Lambda, Docker",
         "SSR",
-        "Postgres, SQLite, NoSQL, redis"
+        "SQLite, redis"
       ],
       "name": "Backend"
     },
