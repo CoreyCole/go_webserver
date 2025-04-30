@@ -9,10 +9,10 @@ var titles = []string{"Home", "About", "Contact"}
 
 templ WelcomePage(content templ.Component) {
 	@layout.Default("Corey Cole Web Server") {
-		<script src="/react/index.js"></script>
-		<div id="react-dropdown"></div>
-		@renderDropdownReact(links, titles)
-		<div class="p-4 max-w-4xl mx-auto">
+		// <script src="/react/index.js"></script>
+		// <div id="react-dropdown"></div>
+		// @renderDropdownReact(links, titles)
+		<div class="p-4 max-w-5xl mx-auto">
 			@content
 		</div>
 	}
