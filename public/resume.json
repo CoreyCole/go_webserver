@@ -29,13 +29,14 @@
   "work": [
     {
       "highlights": [
-        "Closely collaborated and iterated with design and product via Figma to build delightful UIs",
+        "Built and extended full stack features for payouts, compliance, onboarding, and data ingestion pipelines",
+        "Collaborated and iterated with design/product via Figma/excalidraw to build delightful UIs in tailwind",
         "Authored, reviewed and implemented technical specifications for new features and system improvements",
-        "Practiced independent agency: fixed quick-win issues I discovered alongside the main task at hand",
+        "Practiced independent agency: identified and fixed quick-win issues alongside my main task at hand",
         "Built and iterated on GitHub Actions CI/CD and local development tools for engineering efficiency",
         "Leveraged LLM tools to quickly understand, extend and document code",
         "Conducted code reviews with thoughtful questions, feedback and suggestions",
-        "Stack: golang, postgres, SQLc, temporal, react, next, connect-es, tanstack query, zod, RHF and tailwind"
+        "Golang, postgres, SQLc, temporal, dagster, python, react, next, connect-es, tanstack query, zod, & RHF"
       ],
       "position": "Chestnut",
       "company": "Founding Engineer, Full Stack at a16z backed seed stage startup",
@@ -85,7 +86,6 @@
       "highlights": [
         "Built best-in-conference demo for VLDB 2018 and demo'd at ACM SIGMOD 2018",
         "Developed a SQL-based framework for drawing causal inference using Python and Postgres",
-        "Leveraged SQL to scale coarsened exact matching past in-memory tools (R)",
         "Visualized and fixed bias in OLAP queries using Angular and Typescript"
       ],
       "company": "Research Demo Builder for Dan Suciu",
