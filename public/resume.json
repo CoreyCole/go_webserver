@@ -34,7 +34,7 @@
         "Authored, reviewed and implemented technical specifications for new features and system improvements",
         "Practiced independent agency: identified and fixed quick-win issues alongside my main task at hand",
         "Built and iterated on GitHub Actions CI/CD and local development tools for engineering efficiency",
-        "Leveraged LLM tools to quickly understand, extend and document code",
+        "Leveraged LLM tools to quickly pattern match existing functionality, extend and document code",
         "Conducted code reviews with thoughtful questions, feedback and suggestions",
         "Golang, temporal, postgres, SQLc, dynamoDB, dagster, python, connect-es, tanstack query, zod, & RHF"
       ],
