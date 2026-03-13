@@ -29,10 +29,11 @@
   "work": [
     {
       "highlights": [
-        "Built full stack features for payouts, commissions, compliance, onboarding, and data ingestion pipelines",
-        "Created an agentic pipeline for researching the codebase and proposing code change plans",
-        "Created an internal Slack bot with OpenClaw for engineering management, product research, and Linear ticket enrichment",
-        "Leveraged LLM tools to fix bugs and improve code quality in parallel with primary feature work"
+        "Shipped >1.7k PRs >2.3k commits across >6k files in <2 years (if you care around 1M net lines of code)",
+        "Built full stack features for payouts, bonuses, compliance, onboarding, and data ingestion pipelines",
+        "Designed and built an agentic pipeline for researching the codebase and proposing code change plans",
+        "Self-hosted an internal OpenClaw Slack bot for engineering management, product research, and Linear ticket enrichment",
+        "Fixed bugs and improved code quality in parallel with feature work using LLM tooling"
       ],
       "position": "Chestnut",
       "company": "Founding Engineer, Full Stack at a16z backed seed stage startup",
@@ -44,8 +45,8 @@
       "highlights": [
         "Built real-time (<60ms) audio signal processing system to synchronize and echo-cancel in C/Rust",
         "Delivered hardware integration for corporate contract with Hewlett-Packard (HP) in C/GStreamer",
-        "Shipped contacts+notes voice assistant app (Ciremi) in React Native Expo using GPT4 LLM openai api",
-        "Maintained full stack apps for 1000s of users in Typescript/React Native/AWS Lambda/Fargate/EC2",
+        "Shipped contacts+notes voice assistant app (Ciremi) in React Native Expo using GPT-4 via OpenAI API",
+        "Built and maintained full stack apps for 1000s of users in Typescript/React Native/AWS Lambda/Fargate/EC2",
         "Quantized machine learning model for real-time audio signal inference on Android",
         "Mentored junior developers and enhanced engineer productivity by simplifying codebases"
       ],
@@ -134,7 +135,7 @@
   "awards": [
     {
       "summary": "Founding engineer and generalist who ships across the full stack, from data pipelines to polished UIs.",
-      "title": "Senior Software Engineer in native and full stack web applications"
+      "title": "Senior Full Stack Software Engineer"
     }
   ],
   "sections": [
