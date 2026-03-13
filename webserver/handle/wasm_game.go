@@ -26,21 +26,23 @@ func GetGame(c echo.Context) error {
 	if !ok {
 		// check if it's already a full dir name
 		for _, dir := range gameDirs {
-			if dir == gameName {
-				gameDir = dir
-				ok = true
-				break
+			if dir != gameName {
+				continue
 			}
+			gameDir = dir
+			ok = true
+			break
 		}
 	}
 	if !ok {
 		// try prefix match
 		for name, dir := range gameDirs {
-			if strings.HasPrefix(name, gameName) {
-				gameDir = dir
-				ok = true
-				break
+			if !strings.HasPrefix(name, gameName) {
+				continue
 			}
+			gameDir = dir
+			ok = true
+			break
 		}
 	}
 	if !ok {
@@ -68,7 +70,7 @@ func serveGame(c echo.Context, gameDir string) error {
 	return nil
 }
 
-func bevyLoadScript(js string, wasm string) templ.Component {
+func bevyLoadScript(js, wasm string) templ.Component {
 	jsString := fmt.Sprintf(`<script type="module">import init from "%s";
 init("%s").catch((error) => {
 if (!error.message.startsWith("Using exceptions for control flow,")) {

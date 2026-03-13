@@ -3,7 +3,10 @@ package handle
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"runtime"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/dustin/go-humanize"
@@ -20,6 +23,19 @@ import (
 	"github.com/coreycole/go_webserver/webserver/view/layout"
 )
 
+const (
+	percentScale       = 100 // Y-axis percentage scale
+	percentMid         = 50  // midpoint for flat-line rendering
+	snapshotIntervalS  = 30  // seconds between metric snapshots
+	metricsIntervalS   = 2   // seconds between SSE metric pushes
+	hoursPerDay        = 24  // hours in a day
+	minutesPerHour     = 60  // minutes in an hour
+	retentionDays      = 30  // days to keep metrics/page views
+	compactionHours    = 72  // hours before compaction kicks in
+	halfDivisor        = 2   // divisor for midpoint calculation
+	retentionCheckHour = 1   // hours between retention cleanup runs
+)
+
 // memUsed returns meaningful memory usage figures.
 // On macOS, vm.Used includes compressed memory (the VM compressor) which
 // inflates the number to nearly 100% of physical RAM. Active + Wired
@@ -28,9 +44,9 @@ func memUsed(vm *mem.VirtualMemoryStat) (usedBytes uint64, usedPercent float64) 
 	if runtime.GOOS == "darwin" && vm.Active > 0 {
 		usedBytes = vm.Active + vm.Wired
 		if vm.Total > 0 {
-			usedPercent = float64(usedBytes) / float64(vm.Total) * 100
+			usedPercent = float64(usedBytes) / float64(vm.Total) * percentScale
 		}
-		return
+		return usedBytes, usedPercent
 	}
 	return vm.Used, vm.UsedPercent
 }
@@ -41,7 +57,7 @@ type systemSignals struct {
 	MemTotal        string `json:"memTotal,omitempty"`
 	MemUsed         string `json:"memUsed,omitempty"`
 	MemUsedPercent  string `json:"memUsedPercent,omitempty"`
-	CpuPercent      string `json:"cpuPercent,omitempty"`
+	CPUPercent      string `json:"cpuPercent,omitempty"`
 	Uptime          string `json:"uptime,omitempty"`
 	DiskTotal       string `json:"diskTotal,omitempty"`
 	DiskUsed        string `json:"diskUsed,omitempty"`
@@ -58,8 +74,8 @@ var graphRanges = map[string]struct {
 }{
 	"1h":  {1 * time.Hour, "Last Hour"},
 	"6h":  {6 * time.Hour, "Last 6 Hours"},
-	"24h": {24 * time.Hour, "Last 24 Hours"},
-	"3d":  {72 * time.Hour, "Last 3 Days"},
+	"24h": {hoursPerDay * time.Hour, "Last 24 Hours"},
+	"3d":  {compactionHours * time.Hour, "Last 3 Days"},
 }
 
 // StatusHandler serves the /status page and SSE events.
@@ -85,7 +101,7 @@ func NewStatusHandler(database *db.DB) *StatusHandler {
 
 func (h *StatusHandler) runSnapshotWriter(ctx context.Context) {
 	h.takeSnapshot(ctx)
-	ticker := time.NewTicker(30 * time.Second)
+	ticker := time.NewTicker(snapshotIntervalS * time.Second)
 	defer ticker.Stop()
 	for {
 		select {
@@ -125,7 +141,7 @@ func (h *StatusHandler) takeSnapshot(ctx context.Context) {
 }
 
 func (h *StatusHandler) runRetentionCleanup(ctx context.Context) {
-	ticker := time.NewTicker(1 * time.Hour)
+	ticker := time.NewTicker(retentionCheckHour * time.Hour)
 	defer ticker.Stop()
 	for {
 		select {
@@ -138,12 +154,12 @@ func (h *StatusHandler) runRetentionCleanup(ctx context.Context) {
 }
 
 func (h *StatusHandler) doRetentionCleanup(ctx context.Context) {
-	threeDaysAgo := time.Now().Add(-72 * time.Hour)
+	threeDaysAgo := time.Now().Add(-compactionHours * time.Hour)
 	if err := h.db.CompactOldMetrics(ctx, threeDaysAgo); err != nil {
 		log.Error().Err(err).Msg("failed to compact old metrics")
 	}
 
-	thirtyDaysAgo := time.Now().Add(-30 * 24 * time.Hour)
+	thirtyDaysAgo := time.Now().Add(-retentionDays * hoursPerDay * time.Hour)
 	if err := h.db.DeleteMetricsOlderThan(ctx, thirtyDaysAgo); err != nil {
 		log.Error().Err(err).Msg("failed to delete old metrics")
 	}
@@ -167,9 +183,9 @@ func (h *StatusHandler) GetStatusEvents(c echo.Context) error {
 	h.sendGraph(sse, c.Request().Context(), 1*time.Hour, "Last Hour")
 	h.sendStatsOverview(sse, c.Request().Context())
 
-	sysTicker := time.NewTicker(2 * time.Second)
+	sysTicker := time.NewTicker(metricsIntervalS * time.Second)
 	defer sysTicker.Stop()
-	graphTicker := time.NewTicker(30 * time.Second)
+	graphTicker := time.NewTicker(snapshotIntervalS * time.Second)
 	defer graphTicker.Stop()
 
 	for {
@@ -189,7 +205,7 @@ func (h *StatusHandler) GetStatusEvents(c echo.Context) error {
 func (h *StatusHandler) PostGraphUpdate(c echo.Context) error {
 	var signals graphRangeSignals
 	if err := datastar.ReadSignals(c.Request(), &signals); err != nil {
-		return echo.NewHTTPError(400, "invalid signals")
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid signals")
 	}
 
 	entry, ok := graphRanges[signals.GraphRange]
@@ -213,7 +229,7 @@ func (h *StatusHandler) sendSystemMetrics(sse *datastar.ServerSentEventGenerator
 		signals.MemUsedPercent = fmt.Sprintf("%.1f%%", usedPercent)
 	}
 	if cpuPct, err := cpu.Percent(0, false); err == nil && len(cpuPct) > 0 {
-		signals.CpuPercent = fmt.Sprintf("%.1f%%", cpuPct[0])
+		signals.CPUPercent = fmt.Sprintf("%.1f%%", cpuPct[0])
 	}
 	if du, err := disk.Usage("/"); err == nil {
 		signals.DiskTotal = humanize.Bytes(du.Total)
@@ -286,11 +302,11 @@ func (h *StatusHandler) buildGraph(ctx context.Context, dur time.Duration) vi.Gr
 		}
 	}
 	viewsRange := viewsMax - viewsMin
-	viewsMid := viewsMin + viewsRange/2
+	viewsMid := viewsMin + viewsRange/halfDivisor
 
 	data := vi.GraphData{
 		PointCount: n,
-		CpuLast: fmt.Sprintf(
+		CPULast: fmt.Sprintf(
 			"%.1f%%", snaps[n-1].CPUPercent,
 		),
 		MemLast: fmt.Sprintf(
@@ -300,12 +316,10 @@ func (h *StatusHandler) buildGraph(ctx context.Context, dur time.Duration) vi.Gr
 		MemBytesLast: humanize.Bytes(
 			uint64(snaps[n-1].MemUsedBytes),
 		),
-		ViewsLast: fmt.Sprintf(
-			"%d", snaps[n-1].TotalVisits,
-		),
-		ViewsAxisMax: fmt.Sprintf("%d", viewsMax),
-		ViewsAxisMid: fmt.Sprintf("%d", viewsMid),
-		ViewsAxisMin: fmt.Sprintf("%d", viewsMin),
+		ViewsLast:    strconv.FormatInt(snaps[n-1].TotalVisits, 10),
+		ViewsAxisMax: strconv.FormatInt(viewsMax, 10),
+		ViewsAxisMid: strconv.FormatInt(viewsMid, 10),
+		ViewsAxisMin: strconv.FormatInt(viewsMin, 10),
 		TimeStart:    cutoff.Format("15:04"),
 		TimeEnd:      now.Format("15:04"),
 	}
@@ -314,66 +328,59 @@ func (h *StatusHandler) buildGraph(ctx context.Context, dur time.Duration) vi.Gr
 	// CPU and Memory: left Y-axis, 0-100%, Y = 100 - value.
 	// Views: right Y-axis, auto-scaled to min/max range.
 	totalSeconds := now.Sub(cutoff).Seconds()
-	cpuPath := ""
-	memPath := ""
-	viewsPath := ""
+	var cpuBuf, memBuf, viewsBuf strings.Builder
 
 	for i, s := range snaps {
 		x := 0.0
 		if totalSeconds > 0 {
 			x = s.CreatedAt.Sub(cutoff).Seconds() /
-				totalSeconds * 100
+				totalSeconds * percentScale
 		}
-		if x < 0 {
-			x = 0
-		} else if x > 100 {
-			x = 100
-		}
+		x = clamp(x)
 
-		cpuY := 100 - s.CPUPercent
-		memY := 100 - s.MemUsedPercent
-		if cpuY < 0 {
-			cpuY = 0
-		} else if cpuY > 100 {
-			cpuY = 100
-		}
-		if memY < 0 {
-			memY = 0
-		} else if memY > 100 {
-			memY = 100
-		}
+		cpuY := clamp(percentScale - s.CPUPercent)
+		memY := clamp(percentScale - s.MemUsedPercent)
 
 		// Views: normalize to 0-100 range based on min/max.
 		var viewsY float64
 		if viewsRange > 0 {
-			viewsY = 100 - float64(
+			viewsY = percentScale - float64(
 				s.TotalVisits-viewsMin,
-			)/float64(viewsRange)*100
+			)/float64(viewsRange)*percentScale
 		} else {
-			viewsY = 50 // flat line when all values equal
+			viewsY = percentMid // flat line when all values equal
 		}
 
 		cmd := "L"
 		if i == 0 {
 			cmd = "M"
 		}
-		cpuPath += fmt.Sprintf("%s%.1f,%.1f ", cmd, x, cpuY)
-		memPath += fmt.Sprintf("%s%.1f,%.1f ", cmd, x, memY)
-		viewsPath += fmt.Sprintf(
-			"%s%.1f,%.1f ", cmd, x, viewsY,
-		)
+		fmt.Fprintf(&cpuBuf, "%s%.1f,%.1f ", cmd, x, cpuY)
+		fmt.Fprintf(&memBuf, "%s%.1f,%.1f ", cmd, x, memY)
+		fmt.Fprintf(&viewsBuf, "%s%.1f,%.1f ", cmd, x, viewsY)
 	}
 
-	data.CpuPath = cpuPath
-	data.MemPath = memPath
-	data.ViewsPath = viewsPath
+	data.CPUPath = cpuBuf.String()
+	data.MemPath = memBuf.String()
+	data.ViewsPath = viewsBuf.String()
 	return data
 }
 
+// clamp restricts a value to the [0, 100] range.
+func clamp(v float64) float64 {
+	if v < 0 {
+		return 0
+	}
+	if v > percentScale {
+		return percentScale
+	}
+	return v
+}
+
 func formatDuration(d time.Duration) string {
-	days := int(d.Hours()) / 24
-	hours := int(d.Hours()) % 24
-	mins := int(d.Minutes()) % 60
+	days := int(d.Hours()) / hoursPerDay
+	hours := int(d.Hours()) % hoursPerDay
+	mins := int(d.Minutes()) % minutesPerHour
 	if days > 0 {
 		return fmt.Sprintf("%dd %dh %dm", days, hours, mins)
 	}

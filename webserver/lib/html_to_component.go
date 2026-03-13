@@ -11,6 +11,7 @@ import (
 func HTMLToComponent(htmlString string) templ.Component {
 	return templ.ComponentFunc(func(_ context.Context, w io.Writer) error {
 		// Convert the raw HTML string to template.HTML to prevent it from being escaped.
+		//nolint:gosec // G203: input is trusted server-rendered HTML
 		safeHTML := template.HTML(htmlString)
 		_, err := io.WriteString(w, string(safeHTML))
 		return err

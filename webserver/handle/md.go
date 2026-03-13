@@ -19,11 +19,11 @@ func GetMarkdownFile(c echo.Context) error {
 	if strings.Contains(filename, "..") || filepath.IsAbs(filename) {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid filename")
 	}
-	md, err := os.ReadFile(filepath.Join("public/md", filename))
+	md, err := os.ReadFile(filepath.Join("public", "md", filename))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "File not found")
 	}
-	renderer, err := lib.NewMarkdownToHtmlRenderer()
+	renderer, err := lib.NewMarkdownToHTMLRenderer()
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError,

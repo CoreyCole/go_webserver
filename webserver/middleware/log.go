@@ -90,8 +90,8 @@ func mapFields(
 			logFields[k] = ec.FormValue(key)
 		case strings.HasPrefix(tag, logCookiePrefix):
 			key := tag[len(logCookiePrefix):]
-			cookie, err := ec.Cookie(key)
-			if err == nil {
+			cookie, cookieErr := ec.Cookie(key)
+			if cookieErr == nil {
 				logFields[k] = cookie.Value
 			}
 		}

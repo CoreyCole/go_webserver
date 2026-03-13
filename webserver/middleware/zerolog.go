@@ -69,7 +69,7 @@ func ZeroLogWithConfig(cfg ZeroLogConfig) echo.MiddlewareFunc {
 	}
 
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(ctx echo.Context) (err error) {
+		return func(ctx echo.Context) error {
 			if cfg.Skipper(ctx) {
 				return next(ctx)
 			}
@@ -80,7 +80,7 @@ func ZeroLogWithConfig(cfg ZeroLogConfig) echo.MiddlewareFunc {
 				Fields(logFields).
 				Msg("handle request")
 
-			return
+			return err
 		}
 	}
 }

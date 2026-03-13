@@ -15,6 +15,11 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+const (
+	chromaTabWidth  = 2
+	maxHeadingLevel = 6
+)
+
 type MarkdownToHTMLRenderer struct {
 	lightStyle     *chroma.Style
 	darkStyle      *chroma.Style
@@ -22,10 +27,10 @@ type MarkdownToHTMLRenderer struct {
 	mdhtmlRenderer *mdhtml.Renderer
 }
 
-func NewMarkdownToHtmlRenderer() (*MarkdownToHTMLRenderer, error) {
+func NewMarkdownToHTMLRenderer() (*MarkdownToHTMLRenderer, error) {
 	lightStyle := styles.Get("github")
 	darkStyle := styles.Get("github-dark")
-	htmlFormatter := html.New(html.TabWidth(2))
+	htmlFormatter := html.New(html.TabWidth(chromaTabWidth))
 	if htmlFormatter == nil {
 		return nil, errors.New("couldn't create html formatter")
 	}
@@ -56,6 +61,7 @@ func htmlHighlight(
 	}
 	l := lexers.Get(lang)
 	if l == nil {
+		//nolint:misspell // Analyse is the chroma library's API name
 		l = lexers.Analyse(source)
 	}
 	if l == nil {
@@ -98,7 +104,7 @@ func mdhtmlRenderer(
 		RenderNodeHook: func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
 			if code, ok := node.(*ast.CodeBlock); ok {
 				// Light mode code block (hidden until Datastar shows it)
-				w.Write(
+				_, _ = w.Write(
 					[]byte(
 						`<div style="display:none" data-show="$theme !== 'dark'" class="my-4 rounded-xl shadow-lg [&>pre]:p-4">`,
 					),
@@ -107,9 +113,9 @@ func mdhtmlRenderer(
 					log.Error().Msg("error rendering code")
 					return ast.Terminate, false
 				}
-				w.Write([]byte("</div>"))
+				_, _ = w.Write([]byte("</div>"))
 				// Dark mode code block (hidden until Datastar shows it)
-				w.Write(
+				_, _ = w.Write(
 					[]byte(
 						`<div style="display:none" data-show="$theme === 'dark'" class="my-4 rounded-xl shadow-lg [&>pre]:p-4">`,
 					),
@@ -118,33 +124,31 @@ func mdhtmlRenderer(
 					log.Error().Msg("error rendering code")
 					return ast.Terminate, false
 				}
-				w.Write([]byte("</div>"))
+				_, _ = w.Write([]byte("</div>"))
 				return ast.GoToNext, true
 			}
 			if link, ok := node.(*ast.Link); ok {
 				if entering {
-					w.Write(
+					_, _ = w.Write(
 						[]byte(
 							`<a class="font-medium text-primary hover:underline"`,
 						),
 					)
 					if len(link.Title) > 0 {
-						w.Write(
-							[]byte(fmt.Sprintf(` title="link" href="%s"`, link.Title)),
-						)
+						_, _ = fmt.Fprintf(w, ` title="link" href=%q`, link.Title)
 					} else if len(link.Destination) > 0 {
-						w.Write([]byte(fmt.Sprintf(` href="%s"`, link.Destination)))
+						_, _ = fmt.Fprintf(w, ` href=%q`, link.Destination)
 					}
-					w.Write([]byte(">"))
+					_, _ = w.Write([]byte(">"))
 				} else {
-					w.Write([]byte("</a>"))
+					_, _ = w.Write([]byte("</a>"))
 				}
 				return ast.GoToNext, true
 			}
 			if heading, ok := node.(*ast.Heading); ok {
 				headingClass := fmt.Sprintf(
 					"myh myh-%d",
-					min(heading.Level, 6), // max supported level is 6
+					min(heading.Level, maxHeadingLevel),
 				)
 
 				if headingClass != "" {
@@ -165,19 +169,17 @@ func mdhtmlRenderer(
 					listClass = "list-decimal"
 				}
 				if entering {
-					// Start of the list
-					fmt.Fprintf(w, `<ul class="%s ml-6">`, listClass)
+					_, _ = fmt.Fprintf(w, `<ul class="%s ml-6">`, listClass)
 				} else {
-					// End of the list
-					fmt.Fprintf(w, "</ul>")
+					_, _ = fmt.Fprintf(w, "</ul>")
 				}
 				return ast.GoToNext, true
 			}
 			if _, ok := node.(*ast.ListItem); ok {
 				if entering {
-					w.Write([]byte(`<li class="text-lg">`))
+					_, _ = w.Write([]byte(`<li class="text-lg">`))
 				} else {
-					w.Write([]byte("</li>"))
+					_, _ = w.Write([]byte("</li>"))
 				}
 				return ast.GoToNext, true
 			}

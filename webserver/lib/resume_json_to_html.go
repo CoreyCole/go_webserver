@@ -21,7 +21,7 @@ type Award struct {
 }
 
 type Work struct {
-	Company    string   `json:"position"` // positon and company
+	Company    string   `json:"position"` // position and company
 	Position   string   `json:"company"`  // swapped for pdf export
 	Location   string   `json:"location"`
 	StartDate  string   `json:"startDate"`
@@ -45,6 +45,7 @@ type Education struct {
 
 // Main function to convert resume JSON to HTML
 func ResumeJSONToHTML(path string) (string, error) {
+	//nolint:gosec // G304: path is controlled by caller, not user input
 	bytes, err := os.ReadFile(path)
 	if err != nil {
 		return "", err

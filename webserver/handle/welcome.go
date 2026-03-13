@@ -18,7 +18,7 @@ func GetWelcome(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "File not found")
 	}
-	renderer, err := lib.NewMarkdownToHtmlRenderer()
+	renderer, err := lib.NewMarkdownToHTMLRenderer()
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError,

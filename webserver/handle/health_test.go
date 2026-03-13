@@ -12,9 +12,10 @@ import (
 )
 
 func TestHealth(t *testing.T) {
+	t.Parallel()
 	// Setup
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodGet, "/health", nil)
+	req := httptest.NewRequest(http.MethodGet, "/health", http.NoBody)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)

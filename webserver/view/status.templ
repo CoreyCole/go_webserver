@@ -9,7 +9,7 @@ templ StatusPage(args layout.RootArgs) {
 	@layout.Root(args) {
 		<section class="py-12 md:py-20">
 			<div
-				class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8"
+				class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8"
 				data-init="@get('/status/events')"
 				data-signals="{memTotal:'',memUsed:'',memUsedPercent:'',cpuPercent:'',uptime:'',diskTotal:'',diskUsed:'',diskUsedPercent:'',graphRange:'1h',hoveredLine:'',tooltipX:0,tooltipY:0}"
 			>
@@ -93,14 +93,11 @@ templ StatsOverview(totalVisits int64, uniqueVisitors int64) {
 
 templ MetricsGraph(data GraphData) {
 	<div class="rounded-lg border border-border bg-card p-4">
-		<div class="flex items-center justify-between mb-4">
-			if data.TimeLabel != "" {
+		if data.TimeLabel != "" {
+			<div class="mb-4">
 				<span class="text-sm text-muted-foreground">{ data.TimeLabel }</span>
-			}
-			if data.PointCount > 0 {
-				<span class="text-xs text-muted-foreground">{ fmt.Sprintf("%d points", data.PointCount) }</span>
-			}
-		</div>
+			</div>
+		}
 		if data.PointCount == 0 {
 			<div class="flex items-center justify-center h-48 text-sm text-muted-foreground">
 				Collecting data...
@@ -111,7 +108,7 @@ templ MetricsGraph(data GraphData) {
 				<div class="flex items-center gap-2">
 					<span class="inline-block h-0.5 w-4 bg-primary"></span>
 					<span class="text-muted-foreground">CPU</span>
-					<span class="font-medium text-foreground tabular-nums">{ data.CpuLast }</span>
+					<span class="font-medium text-foreground tabular-nums">{ data.CPULast }</span>
 				</div>
 				<div class="flex items-center gap-2">
 					<span class="inline-block h-0.5 w-4 bg-green-500"></span>
@@ -165,7 +162,7 @@ templ MetricsGraph(data GraphData) {
 						<line x1="0" y1="75" x2="100" y2="75" stroke="currentColor" class="text-border" stroke-width="0.5" vector-effect="non-scaling-stroke"></line>
 						<!-- CPU hit area -->
 						<path
-							d={ data.CpuPath }
+							d={ data.CPUPath }
 							fill="none"
 							stroke="transparent"
 							stroke-width="12"
@@ -178,7 +175,7 @@ templ MetricsGraph(data GraphData) {
 						></path>
 						<!-- CPU line -->
 						<path
-							d={ data.CpuPath }
+							d={ data.CPUPath }
 							fill="none"
 							stroke="hsl(var(--primary))"
 							stroke-width="2"
@@ -232,7 +229,7 @@ templ MetricsGraph(data GraphData) {
 					</svg>
 				</div>
 				<!-- Time axis -->
-				<div class="mx-10 flex justify-between text-[10px] text-muted-foreground mt-1">
+				<div class="mx-10 flex justify-between text-[10px] text-muted-foreground mt-2 pb-2">
 					<span>{ data.TimeStart }</span>
 					<span>{ data.TimeEnd }</span>
 				</div>
