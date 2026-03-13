@@ -4,7 +4,7 @@ default:
 build:
     sqlc generate
     templ generate -path webserver/view
-    pnpm exec tailwindcss -i webserver/view/css/index.css -o public/build.css --content "./webserver/view/**/*"
+    pnpm exec tailwindcss -i webserver/view/css/index.css -o public/build.css --content "./webserver/**/*.go" --content "./webserver/**/*.templ"
     go build -o bin/go_webserver main.go
 
 watch:
