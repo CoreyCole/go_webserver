@@ -147,7 +147,7 @@ Dark mode uses CSS custom properties in `@layer base`, NOT Tailwind's `dark:` va
 - Config is CSS-based via `@theme` directive in `webserver/view/css/index.css` (no `tailwind.config.js`)
 - Content scanning uses `--content` CLI flag in justfile, NOT a config file `content` array
 - Import: `@import "tailwindcss"` (not `@tailwind base/components/utilities`)
-- Build: `pnpm exec tailwindcss -i webserver/view/css/index.css -o public/build.css --content "./webserver/view/**/*"`
+- Build: `pnpm exec tailwindcss -i webserver/view/css/index.css -o public/build.css --content "./webserver/**/*.go" --content "./webserver/**/*.templ"`
 
 ## Syntax Highlighting
 
