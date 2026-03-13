@@ -32,28 +32,17 @@ func PageViewMiddleware(database *db.DB) echo.MiddlewareFunc {
 }
 
 func shouldTrack(path string) bool {
-	// Skip static assets.
-	for _, prefix := range []string{"/css/", "/js/", "/img/", "/favicon"} {
-		if strings.HasPrefix(path, prefix) {
-			return false
-		}
+	// Only track known routes.
+	if path == "/" || path == "/status" {
+		return true
 	}
-	// Skip SSE endpoints.
-	if strings.HasSuffix(path, "/events") {
-		return false
+	if strings.HasPrefix(path, "/md/") {
+		return true
 	}
-	// Skip health checks.
-	if path == "/health" {
-		return false
+	if strings.HasPrefix(path, "/games/") && strings.HasSuffix(path, "/game") {
+		return true
 	}
-	// Skip files with extensions (static assets).
-	if idx := strings.LastIndex(path, "/"); idx >= 0 {
-		tail := path[idx:]
-		if strings.Contains(tail, ".") {
-			return false
-		}
-	}
-	return true
+	return false
 }
 
 func hashIP(ip string) string {
