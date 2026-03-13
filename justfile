@@ -28,4 +28,4 @@ check:
     ./scripts/check.sh
 
 sync-thoughts:
-    @echo "thoughts are gitignored in this repo"
+    git add thoughts/ && git commit -m "sync thoughts" || echo "nothing to sync"
