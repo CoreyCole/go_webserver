@@ -52,8 +52,8 @@ func mapFields(
 	ec echo.Context,
 	h echo.HandlerFunc,
 	fm map[string]string,
-) (map[string]interface{}, error) {
-	logFields := map[string]interface{}{}
+) (map[string]any, error) {
+	logFields := map[string]any{}
 	start := time.Now()
 
 	err := h(ec)
@@ -103,8 +103,8 @@ func mapFields(
 // mapTags maps the log tags with its related data. Populate previously the
 // key/value avoids the cyclomatic complexity of the log middlewares to
 // identify each tag and value.
-func mapTags(ec echo.Context, latency time.Duration) map[string]interface{} {
-	tags := map[string]interface{}{}
+func mapTags(ec echo.Context, latency time.Duration) map[string]any {
+	tags := map[string]any{}
 
 	req := ec.Request()
 	res := ec.Response()

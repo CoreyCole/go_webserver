@@ -1,0 +1,25 @@
+version: "2"
+sql:
+  - engine: "sqlite"
+    queries: "webserver/db/queries"
+    schema: "webserver/db/migrations/"
+    gen:
+      go:
+        package: "sqlc"
+        out: "webserver/db/sqlc"
+        emit_interface: true
+        emit_empty_slices: true
+        rename:
+          visitor_hash: "VisitorHash"
+          cpu_percent: "CPUPercent"
+          mem_used_percent: "MemUsedPercent"
+          mem_used_bytes: "MemUsedBytes"
+          total_visits: "TotalVisits"
+          unique_visitors: "UniqueVisitors"
+          created_at: "CreatedAt"
+        overrides:
+          - db_type: "TIMESTAMP"
+            go_type:
+              import: "time"
+              type: "Time"
+            nullable: true

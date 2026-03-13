@@ -1,0 +1,242 @@
+package view
+
+import (
+	"fmt"
+	"github.com/coreycole/go_webserver/webserver/view/layout"
+)
+
+templ StatusPage(args layout.RootArgs) {
+	@layout.Root(args) {
+		<section class="py-12 md:py-20">
+			<div
+				class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8"
+				data-init="@get('/status/events')"
+				data-signals="{memTotal:'',memUsed:'',memUsedPercent:'',cpuPercent:'',uptime:'',diskTotal:'',diskUsed:'',diskUsedPercent:'',graphRange:'1h',hoveredLine:'',tooltipX:0,tooltipY:0}"
+			>
+				<h1 class="text-2xl font-bold text-foreground mb-8">Server Status</h1>
+				<!-- Metrics Graph -->
+				<div class="mb-8">
+					<div class="flex items-center justify-between mb-2">
+						<h2 class="text-lg font-semibold text-foreground">Metrics</h2>
+						<div class="flex gap-1">
+							@graphRangeButton("1h", "1h")
+							@graphRangeButton("6h", "6h")
+							@graphRangeButton("24h", "24h")
+							@graphRangeButton("3d", "3d")
+						</div>
+					</div>
+					<div id="metrics-graph">
+						@MetricsGraph(GraphData{})
+					</div>
+				</div>
+				<!-- Traffic -->
+				<div class="mb-8">
+					<h2 class="text-lg font-semibold text-foreground mb-4">Traffic</h2>
+					<div id="stats-overview">
+						@StatsOverview(0, 0)
+					</div>
+				</div>
+				<!-- System Metrics -->
+				<div class="mb-8">
+					<h2 class="text-lg font-semibold text-foreground mb-4">System</h2>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						@statusMetricCard("CPU", "$cpuPercent")
+						@statusMetricCard("Memory Used", "$memUsed")
+						@statusMetricCard("Memory %", "$memUsedPercent")
+						@statusMetricCard("Total Memory", "$memTotal")
+						@statusMetricCard("Uptime", "$uptime")
+						@statusMetricCard("Disk Used", "$diskUsed")
+						@statusMetricCard("Disk %", "$diskUsedPercent")
+						@statusMetricCard("Total Disk", "$diskTotal")
+					</div>
+				</div>
+			</div>
+		</section>
+	}
+}
+
+templ graphRangeButton(value string, label string) {
+	<button
+		class="px-2 py-1 text-xs rounded border border-border transition-colors hover:bg-accent hover:text-accent-foreground"
+		data-class={ fmt.Sprintf("{'bg-accent text-accent-foreground font-medium': $graphRange === '%s'}", value) }
+		data-on:click={ fmt.Sprintf("$graphRange = '%s'; @post('/status/graph')", value) }
+	>
+		{ label }
+	</button>
+}
+
+templ statusMetricCard(label string, signalExpr string) {
+	<div class="rounded-lg border border-border bg-card p-4">
+		<p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">{ label }</p>
+		<p class="mt-1 text-xl font-semibold text-foreground">
+			<span data-text={ signalExpr } class="tabular-nums">--</span>
+		</p>
+	</div>
+}
+
+templ StatsOverview(totalVisits int64, uniqueVisitors int64) {
+	<div class="grid grid-cols-2 gap-4">
+		<div class="rounded-lg border border-border bg-card p-4">
+			<p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Page Views</p>
+			<p class="mt-1 text-xl font-semibold text-foreground tabular-nums">
+				{ fmt.Sprintf("%d", totalVisits) }
+			</p>
+		</div>
+		<div class="rounded-lg border border-border bg-card p-4">
+			<p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Unique Visitors</p>
+			<p class="mt-1 text-xl font-semibold text-foreground tabular-nums">
+				{ fmt.Sprintf("%d", uniqueVisitors) }
+			</p>
+		</div>
+	</div>
+}
+
+templ MetricsGraph(data GraphData) {
+	<div class="rounded-lg border border-border bg-card p-4">
+		<div class="flex items-center justify-between mb-4">
+			if data.TimeLabel != "" {
+				<span class="text-sm text-muted-foreground">{ data.TimeLabel }</span>
+			}
+			if data.PointCount > 0 {
+				<span class="text-xs text-muted-foreground">{ fmt.Sprintf("%d points", data.PointCount) }</span>
+			}
+		</div>
+		if data.PointCount == 0 {
+			<div class="flex items-center justify-center h-48 text-sm text-muted-foreground">
+				Collecting data...
+			</div>
+		} else {
+			<!-- Legend -->
+			<div class="flex flex-wrap gap-x-6 gap-y-1 mb-3 text-sm">
+				<div class="flex items-center gap-2">
+					<span class="inline-block h-0.5 w-4 bg-primary"></span>
+					<span class="text-muted-foreground">CPU</span>
+					<span class="font-medium text-foreground tabular-nums">{ data.CpuLast }</span>
+				</div>
+				<div class="flex items-center gap-2">
+					<span class="inline-block h-0.5 w-4 bg-green-500"></span>
+					<span class="text-muted-foreground">Memory</span>
+					<span class="font-medium text-foreground tabular-nums">{ data.MemLast }</span>
+					if data.MemBytesLast != "" {
+						<span class="text-xs text-muted-foreground">({ data.MemBytesLast })</span>
+					}
+				</div>
+				<div class="flex items-center gap-2">
+					<span class="inline-block h-0.5 w-4 bg-orange-500"></span>
+					<span class="text-muted-foreground">Views</span>
+					<span class="font-medium text-foreground tabular-nums">{ data.ViewsLast }</span>
+				</div>
+			</div>
+			<!-- Hover tooltip (fixed position, follows mouse) -->
+			<div
+				style="display: none; position: fixed; z-index: 50; pointer-events: none;"
+				data-show="$hoveredLine !== ''"
+				data-style:left="$tooltipX + 'px'"
+				data-style:top="($tooltipY - 40) + 'px'"
+			>
+				<div style="transform: translateX(-50%); white-space: nowrap;" class="rounded-md border border-border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md">
+					<span data-text="$hoveredLine"></span>
+				</div>
+			</div>
+			<!-- Chart -->
+			<div class="relative h-48">
+				<!-- Left Y-axis labels (0-100% scale for CPU/Memory) -->
+				<div class="absolute left-0 top-0 bottom-0 w-8 flex flex-col justify-between text-[10px] text-muted-foreground tabular-nums pointer-events-none">
+					<span>100%</span>
+					<span>75%</span>
+					<span>50%</span>
+					<span>25%</span>
+					<span>0%</span>
+				</div>
+				<!-- Right Y-axis labels (auto-scaled for Views) -->
+				<div class="absolute right-0 top-0 bottom-0 w-10 flex flex-col justify-between text-[10px] text-orange-500 tabular-nums pointer-events-none text-right">
+					<span>{ data.ViewsAxisMax }</span>
+					<span></span>
+					<span>{ data.ViewsAxisMid }</span>
+					<span></span>
+					<span>{ data.ViewsAxisMin }</span>
+				</div>
+				<!-- SVG chart area -->
+				<div class="mx-10 h-full">
+					<svg viewBox="0 0 100 100" preserveAspectRatio="none" class="w-full h-full">
+						<!-- Grid lines at 25%, 50%, 75% -->
+						<line x1="0" y1="25" x2="100" y2="25" stroke="currentColor" class="text-border" stroke-width="0.5" vector-effect="non-scaling-stroke"></line>
+						<line x1="0" y1="50" x2="100" y2="50" stroke="currentColor" class="text-border" stroke-width="0.5" vector-effect="non-scaling-stroke"></line>
+						<line x1="0" y1="75" x2="100" y2="75" stroke="currentColor" class="text-border" stroke-width="0.5" vector-effect="non-scaling-stroke"></line>
+						<!-- CPU hit area -->
+						<path
+							d={ data.CpuPath }
+							fill="none"
+							stroke="transparent"
+							stroke-width="12"
+							vector-effect="non-scaling-stroke"
+							pointer-events="stroke"
+							style="cursor: pointer;"
+							data-on:mouseenter="$hoveredLine = 'CPU'"
+							data-on:mouseleave="$hoveredLine = ''"
+							data-on:mousemove__throttle.16ms="$tooltipX = evt.clientX; $tooltipY = evt.clientY"
+						></path>
+						<!-- CPU line -->
+						<path
+							d={ data.CpuPath }
+							fill="none"
+							stroke="hsl(var(--primary))"
+							stroke-width="2"
+							vector-effect="non-scaling-stroke"
+							pointer-events="none"
+						></path>
+						<!-- Memory hit area -->
+						<path
+							d={ data.MemPath }
+							fill="none"
+							stroke="transparent"
+							stroke-width="12"
+							vector-effect="non-scaling-stroke"
+							pointer-events="stroke"
+							style="cursor: pointer;"
+							data-on:mouseenter="$hoveredLine = 'Memory'"
+							data-on:mouseleave="$hoveredLine = ''"
+							data-on:mousemove__throttle.16ms="$tooltipX = evt.clientX; $tooltipY = evt.clientY"
+						></path>
+						<!-- Memory line -->
+						<path
+							d={ data.MemPath }
+							fill="none"
+							stroke="#22c55e"
+							stroke-width="2"
+							vector-effect="non-scaling-stroke"
+							pointer-events="none"
+						></path>
+						<!-- Views hit area -->
+						<path
+							d={ data.ViewsPath }
+							fill="none"
+							stroke="transparent"
+							stroke-width="12"
+							vector-effect="non-scaling-stroke"
+							pointer-events="stroke"
+							style="cursor: pointer;"
+							data-on:mouseenter="$hoveredLine = 'Views'"
+							data-on:mouseleave="$hoveredLine = ''"
+							data-on:mousemove__throttle.16ms="$tooltipX = evt.clientX; $tooltipY = evt.clientY"
+						></path>
+						<!-- Views line -->
+						<path
+							d={ data.ViewsPath }
+							fill="none"
+							stroke="#f97316"
+							stroke-width="2"
+							vector-effect="non-scaling-stroke"
+							pointer-events="none"
+						></path>
+					</svg>
+				</div>
+				<!-- Time axis -->
+				<div class="mx-10 flex justify-between text-[10px] text-muted-foreground mt-1">
+					<span>{ data.TimeStart }</span>
+					<span>{ data.TimeEnd }</span>
+				</div>
+			</div>
+		}
+	</div>
+}

@@ -2,37 +2,48 @@ package webserver
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
+	"github.com/coreycole/go_webserver/webserver/db"
 	h "github.com/coreycole/go_webserver/webserver/handle"
 	m "github.com/coreycole/go_webserver/webserver/middleware"
 )
 
 func Start(port string) error {
+	database, err := db.New("data/go_webserver.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func() { _ = database.Close() }()
+
 	e := echo.New()
 
 	// Middleware
 	e.Use(middleware.Recover())
 	e.Use(m.ZeroLog())
+	e.Use(m.PageViewMiddleware(database))
+
+	// Status handler (background snapshot writer starts on creation)
+	status := h.NewStatusHandler(database)
 
 	// Routes
 	e.GET("/", h.GetWelcome)
 	e.GET("/health", h.GetHealth)
-	// render markcown
-	e.GET("/md/:filename", h.GetMarkdownFile)
-	// game index pages e.g.
-	// http://localhost:3000/games/giga_platformer/game
+	// render markdown (wildcard supports nested paths like /md/blog/post.md)
+	e.GET("/md/*", h.GetMarkdownFile)
+	// game pages — assets served from S3
 	e.GET("/games/:gameName/game", h.GetGame)
+	// status page with SSE metrics
+	e.GET("/status", status.GetStatus)
+	e.GET("/status/events", status.GetStatusEvents)
+	e.POST("/status/graph", status.PostGraphUpdate)
 
 	// serve static files as a fallback (after all handlers)
-	// game assets loaded with paths e.g.
-	// http://localhost:3000/games/giga_platformer-97832db24b9e2bb6/assets/*
 	e.Static("/", "public/")
 
 	fmt.Println("starting on port", port)
-	err := e.Start(port)
-	e.Logger.Fatal(err)
-	return err
+	return e.Start(port)
 }
