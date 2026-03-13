@@ -29,14 +29,10 @@
   "work": [
     {
       "highlights": [
-        "Built and extended full stack features for payouts, compliance, onboarding, and data ingestion pipelines",
-        "Collaborated and iterated with design/product via Figma/excalidraw to build delightful UIs in tailwind",
-        "Authored, reviewed and implemented technical specifications for new features and system improvements",
-        "Practiced independent agency: identified and fixed quick-win issues alongside my main task at hand",
-        "Built and iterated on GitHub Actions CI/CD and local development tools for engineering efficiency",
-        "Leveraged LLM tools to quickly pattern match existing functionality, extend and document code",
-        "Conducted code reviews with thoughtful questions, feedback and suggestions",
-        "Golang, temporal, postgres, SQLc, dynamoDB, dagster, python, connect-es, tanstack query, zod, & RHF"
+        "Built full stack features for payouts, commissions, compliance, onboarding, and data ingestion pipelines",
+        "Created an agentic pipeline for researching the codebase and proposing code change plans",
+        "Created an internal Slack bot with OpenClaw for engineering management, product research, and Linear ticket enrichment",
+        "Leveraged LLM tools to fix bugs and improve code quality in parallel with primary feature work"
       ],
       "position": "Chestnut",
       "company": "Founding Engineer, Full Stack at a16z backed seed stage startup",
@@ -47,9 +43,9 @@
     {
       "highlights": [
         "Built real-time (<60ms) audio signal processing system to synchronize and echo-cancel in C/Rust",
-        "Built hardware integration for 6 figure corporate contract with Hewlet Packard (HP) in C/GStreamer",
-        "Built contacts+notes voice assistant app (Ciremi) in React Native Expo using GPT4 LLM openai api",
-        "Built full stack apps for 1000s of users in Typescript/React Native/AWS Lambda/Fargate/EC2",
+        "Delivered hardware integration for corporate contract with Hewlett-Packard (HP) in C/GStreamer",
+        "Shipped contacts+notes voice assistant app (Ciremi) in React Native Expo using GPT4 LLM openai api",
+        "Maintained full stack apps for 1000s of users in Typescript/React Native/AWS Lambda/Fargate/EC2",
         "Quantized machine learning model for real-time audio signal inference on Android",
         "Mentored junior developers and enhanced engineer productivity by simplifying codebases"
       ],
@@ -108,51 +104,37 @@
   "skills": [
     {
       "level": "",
-      "keywords": [
-        "Go",
-        "SQL",
-        "Typescript",
-        "Python",
-        "Protobuf",
-        "C/C++",
-        "Rust",
-        "GStreamer"
-      ],
+      "keywords": ["Go", "SQL", "Typescript", "Python", "C", "Rust"],
       "name": "Languages"
     },
     {
       "keywords": [
-        "Temporal, Postgres, DynamoDB, Dagster, AWS, EC2, Lambda, Docker",
-        "SSR",
-        "SQLite, redis"
+        "Temporal, Postgres, Datastar, SSE, AWS, EC2, Lambda, Docker",
+        "SQLite, redis, GStreamer"
       ],
       "name": "Backend"
     },
     {
       "keywords": [
-        "React, Next, Tanstack Query, Connect-es, Tailwind, React-Hook-Form, Zod, Shadcn"
+        "React, Next, Tanstack Query, Proto Connect, Tailwind, React-Hook-Form, Zod, Shadcn"
       ],
       "name": "Frontend"
     },
     {
-      "keywords": [
-        "Neovim, Supermaven, Cursor, GitHub Actions, Linear, Excalidraw, Postman, Figma"
-      ],
+      "keywords": ["Neovim, Claude Code, OpenClaw, Linear, Excalidraw, Figma"],
       "name": "Tools"
     }
   ],
   "projects": [
     {
       "url": "",
-      "keywords": [
-        null
-      ]
+      "keywords": [null]
     }
   ],
   "awards": [
     {
-      "summary": "Comfortable embracing many roles including product design and project management",
-      "title": "Senior Software Engineer in native and full stack web applications (in Seattle)"
+      "summary": "Founding engineer and generalist who ships across the full stack, from data pipelines to polished UIs.",
+      "title": "Senior Software Engineer in native and full stack web applications"
     }
   ],
   "sections": [
