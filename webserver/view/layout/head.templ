@@ -1,0 +1,36 @@
+package layout
+
+templ Head(args RootArgs) {
+	<head>
+		<title>{ args.Title }</title>
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png"/>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<!-- Social media preview -->
+		<meta property="og:title" content={ args.Title }/>
+		<meta property="og:description" content="Corey Cole's Projects & Experience"/>
+		<meta property="og:image" content="/img/social-media.png"/>
+		<meta property="og:type" content="website"/>
+		<meta name="twitter:card" content="summary_large_image"/>
+		<meta name="twitter:title" content={ args.Title }/>
+		<meta name="twitter:description" content="Corey Cole's Projects & Experience"/>
+		<meta name="twitter:image" content="/img/social-media.png"/>
+		<link rel="stylesheet" href="/build.css"/>
+		<!-- Theme initialization -->
+		<script>
+			function initTheme() {
+				const theme =
+					localStorage.getItem("theme") ||
+					(window.matchMedia("(prefers-color-scheme: dark)").matches
+						? "dark"
+						: "light");
+				document.documentElement.classList.toggle("dark", theme === "dark");
+				return theme;
+			}
+			initTheme();
+		</script>
+		<!-- Datastar -->
+		<script type="module" src="/js/datastar-1-0-0-rc-8-1df5dc253a746506.js"></script>
+	</head>
+}

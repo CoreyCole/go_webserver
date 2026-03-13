@@ -1,0 +1,11 @@
+package view
+
+import "github.com/coreycole/go_webserver/webserver/view/layout"
+
+templ HomePage(content templ.Component) {
+	@layout.Root(layout.RootArgs{Title: "Corey Cole"}) {
+		<div class="p-4 max-w-5xl mx-auto">
+			@content
+		</div>
+	}
+}

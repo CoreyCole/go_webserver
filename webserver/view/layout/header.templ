@@ -1,0 +1,106 @@
+package layout
+
+templ Header() {
+	<header class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+		<div class="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
+			<!-- Left: Name -->
+			<a class="flex items-center no-underline" href="/">
+				<span class="font-semibold text-foreground text-lg">Projects & Experience</span>
+			</a>
+			<!-- Right: Status + Links dropdown + Theme toggle -->
+			<nav class="flex items-center gap-2">
+				<!-- Status link -->
+				<a
+					href="/status"
+					class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 px-3"
+				>
+					Status
+				</a>
+				<!-- Links dropdown -->
+				<div
+					class="relative"
+					data-signals="{menuOpen: false}"
+					data-on:click__outside="$menuOpen ? $menuOpen = false : void 0"
+				>
+					<button
+						class="inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 px-3"
+						data-on:click="$menuOpen = !$menuOpen"
+					>
+						🔗 Links
+					</button>
+					<!-- Dropdown content -->
+					<div
+						class="absolute right-0 top-full mt-1 z-50 min-w-[10rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md"
+						style="display: none;"
+						data-show="$menuOpen"
+						data-on:keydown__window="evt.key === 'Escape' && $menuOpen ? ($menuOpen = false) : void 0"
+						role="menu"
+					>
+						<a
+							href="/resume.pdf"
+							class="flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-accent hover:text-accent-foreground"
+							data-on:click="$menuOpen = false"
+						>
+							Resume PDF
+						</a>
+						<a
+							href="https://github.com/coreycole"
+							target="_blank"
+							rel="noreferrer"
+							class="flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-accent hover:text-accent-foreground"
+							data-on:click="$menuOpen = false"
+						>
+							GitHub
+						</a>
+						<a
+							href="https://x.com/ccoreycole"
+							target="_blank"
+							rel="noreferrer"
+							class="flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-accent hover:text-accent-foreground"
+							data-on:click="$menuOpen = false"
+						>
+							X
+						</a>
+						<a
+							href="https://linkedin.com/in/coreylcole"
+							target="_blank"
+							rel="noreferrer"
+							class="flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm cursor-pointer transition-colors hover:bg-accent hover:text-accent-foreground"
+							data-on:click="$menuOpen = false"
+						>
+							LinkedIn
+						</a>
+					</div>
+				</div>
+				<!-- Theme toggle -->
+				<button
+					class="relative inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 w-9"
+					data-on:click="$theme = $theme === 'dark' ? 'light' : 'dark'; document.documentElement.classList.toggle('dark', $theme === 'dark'); localStorage.setItem('theme', $theme);"
+				>
+					<!-- Sun icon -->
+					<svg
+						class="h-4 w-4 transition-all"
+						data-class="{'rotate-0 scale-100': $theme === 'light', '-rotate-90 scale-0': $theme === 'dark'}"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+					>
+						<circle cx="12" cy="12" r="5"></circle>
+						<path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+					</svg>
+					<!-- Moon icon -->
+					<svg
+						class="absolute h-4 w-4 transition-all"
+						data-class="{'rotate-90 scale-0': $theme === 'light', 'rotate-0 scale-100': $theme === 'dark'}"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+					>
+						<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+					</svg>
+					<span class="sr-only">Toggle theme</span>
+				</button>
+			</nav>
+		</div>
+	</header>
+}

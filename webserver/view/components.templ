@@ -1,32 +1,10 @@
 package view
 
-import (
-	"github.com/coreycole/go_webserver/webserver/view/layout"
-)
-
-var links = []string{"/", "/about", "/contact"}
-var titles = []string{"Home", "About", "Contact"}
-
-templ WelcomePage(content templ.Component) {
-	@layout.Default("Corey Cole Web Server") {
-		// <script src="/react/index.js"></script>
-		// <div id="react-dropdown"></div>
-		// @renderDropdownReact(links, titles)
-		<div class="p-4 max-w-5xl mx-auto">
-			@content
-		</div>
-	}
-}
-
-// Use the renderDropdown function from the React bundle.
-
-script renderDropdownReact(links []string, titles []string) {
-bundle.renderDropdown(links, titles)
-}
+import "github.com/coreycole/go_webserver/webserver/view/layout"
 
 templ MarkdownPage(content templ.Component) {
 	@layout.Default("Markdown Viewer") {
-		<div class="p-4 bg-black">
+		<div class="p-4 max-w-5xl mx-auto">
 			@content
 		</div>
 	}
