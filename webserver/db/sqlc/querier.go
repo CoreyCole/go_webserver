@@ -6,15 +6,14 @@ package sqlc
 
 import (
 	"context"
-	"time"
 )
 
 type Querier interface {
 	CountTotalPageViews(ctx context.Context) (int64, error)
 	CountUniqueVisitors(ctx context.Context) (int64, error)
-	DeleteMetricsOlderThan(ctx context.Context, createdAt time.Time) error
-	DeletePageViewsOlderThan(ctx context.Context, createdAt time.Time) error
-	GetMetricsSince(ctx context.Context, createdAt time.Time) ([]MetricsSnapshot, error)
+	DeleteMetricsOlderThan(ctx context.Context, datetime interface{}) error
+	DeletePageViewsOlderThan(ctx context.Context, datetime interface{}) error
+	GetMetricsSince(ctx context.Context, datetime interface{}) ([]MetricsSnapshot, error)
 	InsertMetricsSnapshot(ctx context.Context, arg InsertMetricsSnapshotParams) error
 	InsertPageView(ctx context.Context, arg InsertPageViewParams) error
 }

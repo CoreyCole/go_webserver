@@ -154,16 +154,14 @@ func (h *StatusHandler) runRetentionCleanup(ctx context.Context) {
 }
 
 func (h *StatusHandler) doRetentionCleanup(ctx context.Context) {
-	threeDaysAgo := time.Now().Add(-compactionHours * time.Hour)
-	if err := h.db.CompactOldMetrics(ctx, threeDaysAgo); err != nil {
+	if err := h.db.CompactOldMetrics(ctx, "-3 days"); err != nil {
 		log.Error().Err(err).Msg("failed to compact old metrics")
 	}
 
-	thirtyDaysAgo := time.Now().Add(-retentionDays * hoursPerDay * time.Hour)
-	if err := h.db.DeleteMetricsOlderThan(ctx, thirtyDaysAgo); err != nil {
+	if err := h.db.DeleteMetricsOlderThan(ctx, "-30 days"); err != nil {
 		log.Error().Err(err).Msg("failed to delete old metrics")
 	}
-	if err := h.db.DeletePageViewsOlderThan(ctx, thirtyDaysAgo); err != nil {
+	if err := h.db.DeletePageViewsOlderThan(ctx, "-30 days"); err != nil {
 		log.Error().Err(err).Msg("failed to delete old page views")
 	}
 }
@@ -267,11 +265,17 @@ func (h *StatusHandler) sendGraph(
 	)
 }
 
+// sqliteOffset converts a time.Duration to a SQLite datetime modifier string.
+func sqliteOffset(dur time.Duration) string {
+	secs := int(dur.Seconds())
+	return fmt.Sprintf("-%d seconds", secs)
+}
+
 func (h *StatusHandler) buildGraph(ctx context.Context, dur time.Duration) vi.GraphData {
 	now := time.Now()
 	cutoff := now.Add(-dur)
 
-	snaps, err := h.db.GetMetricsSince(ctx, cutoff)
+	snaps, err := h.db.GetMetricsSince(ctx, sqliteOffset(dur))
 	if err != nil {
 		log.Error().Err(err).Msg("failed to get metrics for graph")
 		return vi.GraphData{}

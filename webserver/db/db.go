@@ -8,7 +8,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	_ "modernc.org/sqlite"
 
@@ -64,10 +63,11 @@ func (d *DB) WithTx(tx *sql.Tx) *sqlc.Queries {
 	return d.Queries.WithTx(tx)
 }
 
-// CompactOldMetrics aggregates metrics older than the given time into hourly buckets.
+// CompactOldMetrics aggregates metrics older than the given time offset into hourly buckets.
+// offset is a SQLite datetime modifier string, e.g. "-3 days".
 // In a single transaction: compute hourly averages, delete raw rows, insert compacted rows.
 // Idempotent — re-compacting an already-compacted hour-bucket is a no-op (HAVING COUNT(*) > 1).
-func (d *DB) CompactOldMetrics(ctx context.Context, olderThan time.Time) error {
+func (d *DB) CompactOldMetrics(ctx context.Context, offset string) error {
 	tx, err := d.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
@@ -85,10 +85,10 @@ func (d *DB) CompactOldMetrics(ctx context.Context, olderThan time.Time) error {
 			MAX(unique_visitors),
 			COUNT(*) AS cnt
 		FROM metrics_snapshots
-		WHERE created_at < ?
+		WHERE created_at < datetime('now', ?)
 		GROUP BY bucket
 		HAVING cnt > 1
-	`, olderThan)
+	`, offset)
 	if err != nil {
 		return err
 	}
@@ -128,8 +128,8 @@ func (d *DB) CompactOldMetrics(ctx context.Context, olderThan time.Time) error {
 		// Delete all raw rows in this hour bucket.
 		if _, execErr := tx.ExecContext(ctx, `
 			DELETE FROM metrics_snapshots
-			WHERE created_at < ? AND strftime('%Y-%m-%d %H:00:00', created_at) = ?
-		`, olderThan, c.bucket); execErr != nil {
+			WHERE created_at < datetime('now', ?) AND strftime('%Y-%m-%d %H:00:00', created_at) = ?
+		`, offset, c.bucket); execErr != nil {
 			return execErr
 		}
 		// Insert single compacted row with the bucket timestamp.

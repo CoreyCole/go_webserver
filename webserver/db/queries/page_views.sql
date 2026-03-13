@@ -8,4 +8,4 @@ SELECT COUNT(*) FROM page_views;
 SELECT COUNT(DISTINCT visitor_hash) FROM page_views WHERE visitor_hash != '';
 
 -- name: DeletePageViewsOlderThan :exec
-DELETE FROM page_views WHERE created_at < ?;
+DELETE FROM page_views WHERE created_at < datetime('now', ?);

@@ -7,27 +7,26 @@ package sqlc
 
 import (
 	"context"
-	"time"
 )
 
 const deleteMetricsOlderThan = `-- name: DeleteMetricsOlderThan :exec
-DELETE FROM metrics_snapshots WHERE created_at < ?
+DELETE FROM metrics_snapshots WHERE created_at < datetime('now', ?)
 `
 
-func (q *Queries) DeleteMetricsOlderThan(ctx context.Context, createdAt time.Time) error {
-	_, err := q.db.ExecContext(ctx, deleteMetricsOlderThan, createdAt)
+func (q *Queries) DeleteMetricsOlderThan(ctx context.Context, datetime interface{}) error {
+	_, err := q.db.ExecContext(ctx, deleteMetricsOlderThan, datetime)
 	return err
 }
 
 const getMetricsSince = `-- name: GetMetricsSince :many
 SELECT id, cpu_percent, mem_used_percent, mem_used_bytes, total_visits, unique_visitors, created_at
 FROM metrics_snapshots
-WHERE created_at >= ?
+WHERE created_at >= datetime('now', ?)
 ORDER BY created_at ASC
 `
 
-func (q *Queries) GetMetricsSince(ctx context.Context, createdAt time.Time) ([]MetricsSnapshot, error) {
-	rows, err := q.db.QueryContext(ctx, getMetricsSince, createdAt)
+func (q *Queries) GetMetricsSince(ctx context.Context, datetime interface{}) ([]MetricsSnapshot, error) {
+	rows, err := q.db.QueryContext(ctx, getMetricsSince, datetime)
 	if err != nil {
 		return nil, err
 	}

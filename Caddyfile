@@ -1,0 +1,3 @@
+coreycc.com {
+    reverse_proxy localhost:3001
+}

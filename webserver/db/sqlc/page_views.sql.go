@@ -7,7 +7,6 @@ package sqlc
 
 import (
 	"context"
-	"time"
 )
 
 const countTotalPageViews = `-- name: CountTotalPageViews :one
@@ -33,11 +32,11 @@ func (q *Queries) CountUniqueVisitors(ctx context.Context) (int64, error) {
 }
 
 const deletePageViewsOlderThan = `-- name: DeletePageViewsOlderThan :exec
-DELETE FROM page_views WHERE created_at < ?
+DELETE FROM page_views WHERE created_at < datetime('now', ?)
 `
 
-func (q *Queries) DeletePageViewsOlderThan(ctx context.Context, createdAt time.Time) error {
-	_, err := q.db.ExecContext(ctx, deletePageViewsOlderThan, createdAt)
+func (q *Queries) DeletePageViewsOlderThan(ctx context.Context, datetime interface{}) error {
+	_, err := q.db.ExecContext(ctx, deletePageViewsOlderThan, datetime)
 	return err
 }
 
