@@ -5,44 +5,37 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/alecthomas/chroma"
-	"github.com/alecthomas/chroma/formatters/html"
-	"github.com/alecthomas/chroma/lexers"
-	"github.com/alecthomas/chroma/styles"
+	"github.com/alecthomas/chroma/v2"
+	"github.com/alecthomas/chroma/v2/formatters/html"
+	"github.com/alecthomas/chroma/v2/lexers"
+	"github.com/alecthomas/chroma/v2/styles"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/ast"
 	mdhtml "github.com/gomarkdown/markdown/html"
-)
-
-const (
-	DEFAULT_CODE_STYLE = "monokai"
+	"github.com/rs/zerolog/log"
 )
 
 type MarkdownToHTMLRenderer struct {
-	highlightStyle *chroma.Style
+	lightStyle     *chroma.Style
+	darkStyle      *chroma.Style
 	htmlFormatter  *html.Formatter
 	mdhtmlRenderer *mdhtml.Renderer
 }
 
-func NewMarkdownToHtmlRenderer(highlightStyleString string) (*MarkdownToHTMLRenderer, error) {
-	var styleName string
-	if highlightStyleString == "" {
-		styleName = DEFAULT_CODE_STYLE
-	} else {
-		styleName = highlightStyleString
-	}
-	highlightStyle := styles.Get(DEFAULT_CODE_STYLE)
-	if style, ok := styles.Registry[styleName]; ok {
-		highlightStyle = style
-	} else {
-		fmt.Printf("invaid style: %s\n", styleName)
-	}
-	htmlFormatter := html.New(html.Standalone(true), html.TabWidth(2))
+func NewMarkdownToHtmlRenderer() (*MarkdownToHTMLRenderer, error) {
+	lightStyle := styles.Get("github")
+	darkStyle := styles.Get("github-dark")
+	htmlFormatter := html.New(html.TabWidth(2))
 	if htmlFormatter == nil {
 		return nil, errors.New("couldn't create html formatter")
 	}
-	mdhtmlRenderer := mdhtmlRenderer(highlightStyle, htmlFormatter)
-	return &MarkdownToHTMLRenderer{highlightStyle, htmlFormatter, mdhtmlRenderer}, nil
+	mdhtmlRenderer := mdhtmlRenderer(lightStyle, darkStyle, htmlFormatter)
+	return &MarkdownToHTMLRenderer{
+		lightStyle,
+		darkStyle,
+		htmlFormatter,
+		mdhtmlRenderer,
+	}, nil
 }
 
 func (m MarkdownToHTMLRenderer) MarkdownBytesToHTML(md []byte) string {
@@ -95,15 +88,34 @@ func renderCode(
 	)
 }
 
-func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter) *mdhtml.Renderer {
+func mdhtmlRenderer(
+	lightStyle *chroma.Style,
+	darkStyle *chroma.Style,
+	htmlFormatter *html.Formatter,
+) *mdhtml.Renderer {
 	opts := mdhtml.RendererOptions{
 		Flags: mdhtml.CommonFlags | mdhtml.HrefTargetBlank,
 		RenderNodeHook: func(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
 			if code, ok := node.(*ast.CodeBlock); ok {
-				w.Write([]byte(`<div class="my-4 rounded-xl shadow-lg [&>pre]:p-4">`))
-				err := renderCode(w, code, highlightStyle, htmlFormatter)
-				if err != nil {
-					fmt.Println("error rendering code")
+				// Light mode code block (hidden until Datastar shows it)
+				w.Write(
+					[]byte(
+						`<div style="display:none" data-show="$theme !== 'dark'" class="my-4 rounded-xl shadow-lg [&>pre]:p-4">`,
+					),
+				)
+				if err := renderCode(w, code, lightStyle, htmlFormatter); err != nil {
+					log.Error().Msg("error rendering code")
+					return ast.Terminate, false
+				}
+				w.Write([]byte("</div>"))
+				// Dark mode code block (hidden until Datastar shows it)
+				w.Write(
+					[]byte(
+						`<div style="display:none" data-show="$theme === 'dark'" class="my-4 rounded-xl shadow-lg [&>pre]:p-4">`,
+					),
+				)
+				if err := renderCode(w, code, darkStyle, htmlFormatter); err != nil {
+					log.Error().Msg("error rendering code")
 					return ast.Terminate, false
 				}
 				w.Write([]byte("</div>"))
@@ -113,11 +125,13 @@ func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter)
 				if entering {
 					w.Write(
 						[]byte(
-							`<a class="font-medium text-green-600 dark:text-green-400 hover:underline"`,
+							`<a class="font-medium text-primary hover:underline"`,
 						),
 					)
 					if len(link.Title) > 0 {
-						w.Write([]byte(fmt.Sprintf(` title="link" href="%s"`, link.Title)))
+						w.Write(
+							[]byte(fmt.Sprintf(` title="link" href="%s"`, link.Title)),
+						)
 					} else if len(link.Destination) > 0 {
 						w.Write([]byte(fmt.Sprintf(` href="%s"`, link.Destination)))
 					}
@@ -159,12 +173,7 @@ func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter)
 				}
 				return ast.GoToNext, true
 			}
-			if li, ok := node.(*ast.ListItem); ok {
-				attr := li.Attribute
-				if attr == nil {
-					attr = &ast.Attribute{}
-				}
-				attr.Classes = append(attr.Classes, []byte("text-lg"))
+			if _, ok := node.(*ast.ListItem); ok {
 				if entering {
 					w.Write([]byte(`<li class="text-lg">`))
 				} else {
@@ -186,20 +195,4 @@ func mdhtmlRenderer(highlightStyle *chroma.Style, htmlFormatter *html.Formatter)
 		},
 	}
 	return mdhtml.NewRenderer(opts)
-}
-
-// assumes lists can be wrapped and we will still find parent lists, for exmaple
-// ````
-// <div><ul><li>list item</li></ul></div>
-// ````
-func calculateListDepth(node ast.Node) int {
-	depth := 0
-	parent := node.GetParent()
-	for parent != nil {
-		if _, ok := parent.(*ast.List); ok {
-			depth++
-		}
-		parent = parent.GetParent()
-	}
-	return depth
 }

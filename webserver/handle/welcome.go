@@ -7,21 +7,18 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/coreycole/go_webserver/webserver/lib"
+	lib "github.com/coreycole/go_webserver/webserver/lib"
 	vi "github.com/coreycole/go_webserver/webserver/view"
 )
 
-const (
-	style     = "monokai"
-	welcomeMd = "public/md/welcome.md"
-)
+const welcomeMd = "public/md/welcome.md"
 
 func GetWelcome(c echo.Context) error {
 	md, err := os.ReadFile(welcomeMd)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "File not found")
 	}
-	renderer, err := lib.NewMarkdownToHtmlRenderer(style)
+	renderer, err := lib.NewMarkdownToHtmlRenderer()
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError,
@@ -29,12 +26,6 @@ func GetWelcome(c echo.Context) error {
 		)
 	}
 	mdHTML := renderer.MarkdownBytesToHTML(md)
-	if err != nil {
-		return echo.NewHTTPError(
-			http.StatusInternalServerError,
-			"Error rendering markdown to html: "+err.Error(),
-		)
-	}
 	resumeHTML, err := lib.ResumeJSONToHTML("public/resume.json")
 	if err != nil {
 		return echo.NewHTTPError(
@@ -42,8 +33,8 @@ func GetWelcome(c echo.Context) error {
 			"Error rendering resume to html: "+err.Error(),
 		)
 	}
-	welcomeContent := lib.HTMLToComponent(fmt.Sprintf("%s\n%s", mdHTML, resumeHTML))
-	view := vi.WelcomePage(welcomeContent)
+	content := lib.HTMLToComponent(fmt.Sprintf("%s\n%s", mdHTML, resumeHTML))
+	view := vi.HomePage(content)
 
 	if err := view.Render(c.Request().Context(), c.Response().Writer); err != nil {
 		return echo.NewHTTPError(

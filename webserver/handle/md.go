@@ -3,6 +3,8 @@ package handle
 import (
 	"net/http"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 
@@ -11,13 +13,17 @@ import (
 )
 
 func GetMarkdownFile(c echo.Context) error {
-	filename := c.Param("filename")
-	style := c.QueryParam("style")
-	md, err := os.ReadFile("public/md/" + filename)
+	filename := c.Param("*")
+	// Sanitize filename to prevent path traversal
+	filename = filepath.Clean(filename)
+	if strings.Contains(filename, "..") || filepath.IsAbs(filename) {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid filename")
+	}
+	md, err := os.ReadFile(filepath.Join("public/md", filename))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "File not found")
 	}
-	renderer, err := lib.NewMarkdownToHtmlRenderer(style)
+	renderer, err := lib.NewMarkdownToHtmlRenderer()
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError,
@@ -25,12 +31,6 @@ func GetMarkdownFile(c echo.Context) error {
 		)
 	}
 	mdHTML := renderer.MarkdownBytesToHTML(md)
-	if err != nil {
-		return echo.NewHTTPError(
-			http.StatusInternalServerError,
-			"Error rendering markdown to html: "+err.Error(),
-		)
-	}
 
 	// Use the Page templ component to construct the full page HTML
 	mdComponent := lib.HTMLToComponent(mdHTML)

@@ -95,7 +95,11 @@ func ResumeJSONToHTML(path string) (string, error) {
 			}
 			htmlSlice = append(
 				htmlSlice,
-				fmt.Sprintf(`<li class="ml-4 text-lg %s">%s</li>`, bottomMargin, highlight),
+				fmt.Sprintf(
+					`<li class="ml-4 text-lg %s">%s</li>`,
+					bottomMargin,
+					highlight,
+				),
 			)
 		}
 	}
@@ -107,7 +111,7 @@ func ResumeJSONToHTML(path string) (string, error) {
 			htmlSlice,
 			fmt.Sprintf(
 				`<p><span class="font-bold">%s: </span>
-        <span class="italic">%s</span><p>`,
+        <span class="italic">%s</span></p>`,
 				skill.Name,
 				strings.Join(skill.Keywords, ", "),
 			),
