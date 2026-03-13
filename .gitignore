@@ -8,4 +8,7 @@ log/
 node_modules/
 vendor/
 .env
-public/react/**/*.js
+public/games/
+context/
+thoughts/
+data/

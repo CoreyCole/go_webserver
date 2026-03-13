@@ -3,8 +3,6 @@ package handle
 import (
 	"fmt"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/a-h/templ"
@@ -14,27 +12,46 @@ import (
 	vi "github.com/coreycole/go_webserver/webserver/view"
 )
 
+const s3BaseURL = "https://coreycole-games.s3.us-west-2.amazonaws.com/games"
+
+// maps short game names to their full directory names on S3
+var gameDirs = map[string]string{
+	"giga_platformer": "giga_platformer-7143ed686304a07e",
+	"nessyclothes":    "nessyclothes-3d0f9d8535e29267",
+}
+
 func GetGame(c echo.Context) error {
 	gameName := c.Param("gameName")
-	baseDir := "public/games"
-	exactMatch, err := os.Stat(filepath.Join(baseDir, gameName))
-	if err == nil && exactMatch.IsDir() {
-		fmt.Printf("exact match\n")
-		return serveGame(c, gameName)
+	gameDir, ok := gameDirs[gameName]
+	if !ok {
+		// check if it's already a full dir name
+		for _, dir := range gameDirs {
+			if dir == gameName {
+				gameDir = dir
+				ok = true
+				break
+			}
+		}
 	}
-	gameDir, err := findGameDir(baseDir, gameName)
-	if err != nil {
+	if !ok {
+		// try prefix match
+		for name, dir := range gameDirs {
+			if strings.HasPrefix(name, gameName) {
+				gameDir = dir
+				ok = true
+				break
+			}
+		}
+	}
+	if !ok {
 		return echo.NewHTTPError(http.StatusNotFound, "Game not found")
 	}
-	// Redirect to the URL with the full game directory name
-	redirectURL := fmt.Sprintf("/games/%s/game", gameDir)
-	fmt.Printf("redirectURl = %s\n", redirectURL)
-	return c.Redirect(http.StatusTemporaryRedirect, redirectURL)
+	return serveGame(c, gameDir)
 }
 
 func serveGame(c echo.Context, gameDir string) error {
-	js := fmt.Sprintf("/games/%s/%s.js", gameDir, gameDir)
-	wasm := fmt.Sprintf("/games/%s/%s_bg.wasm", gameDir, gameDir)
+	js := fmt.Sprintf("%s/%s/%s.js", s3BaseURL, gameDir, gameDir)
+	wasm := fmt.Sprintf("%s/%s/%s_bg.wasm", s3BaseURL, gameDir, gameDir)
 	loadscript := bevyLoadScript(js, wasm)
 	view := vi.BevyPage(
 		js,
@@ -49,21 +66,6 @@ func serveGame(c echo.Context, gameDir string) error {
 	}
 
 	return nil
-}
-
-func findGameDir(gamesDir string, gameName string) (string, error) {
-	files, err := os.ReadDir(gamesDir)
-	if err != nil {
-		return "", err
-	}
-
-	for _, file := range files {
-		if file.IsDir() && strings.HasPrefix(file.Name(), gameName) {
-			return file.Name(), nil
-		}
-	}
-
-	return "", fmt.Errorf("directory for game %s not found", gameName)
 }
 
 func bevyLoadScript(js string, wasm string) templ.Component {
