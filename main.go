@@ -9,7 +9,8 @@ import (
 )
 
 type Config struct {
-	Port string `envconfig:"PORT" default:"3001"`
+	Port          string `envconfig:"PORT"           default:"3001"`
+	WebhookSecret string `envconfig:"WEBHOOK_SECRET"`
 }
 
 func main() {
@@ -17,7 +18,7 @@ func main() {
 	if err := envconfig.Process("", &cfg); err != nil {
 		log.Fatal(err)
 	}
-	if err := webserver.Start(":" + cfg.Port); err != nil {
+	if err := webserver.Start(":"+cfg.Port, cfg.WebhookSecret); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -10,9 +10,10 @@ import (
 	"github.com/coreycole/go_webserver/webserver/db"
 	h "github.com/coreycole/go_webserver/webserver/handle"
 	m "github.com/coreycole/go_webserver/webserver/middleware"
+	"github.com/coreycole/go_webserver/webserver/webhook"
 )
 
-func Start(port string) error {
+func Start(port, webhookSecret string) error {
 	database, err := db.New("data/go_webserver.db")
 	if err != nil {
 		log.Fatal(err)
@@ -40,6 +41,10 @@ func Start(port string) error {
 	e.GET("/status", status.GetStatus)
 	e.GET("/status/events", status.GetStatusEvents)
 	e.POST("/status/graph", status.PostGraphUpdate)
+
+	// webhook for auto-deploy
+	wh := webhook.New(webhookSecret)
+	e.POST("/webhook/github", wh.HandleGitHub)
 
 	// serve static files as a fallback (after all handlers)
 	e.Static("/", "public/")

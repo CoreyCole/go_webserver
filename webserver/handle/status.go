@@ -328,12 +328,17 @@ func (h *StatusHandler) buildGraph(ctx context.Context, dur time.Duration) vi.Gr
 		TimeEnd:      now.Format("15:04"),
 	}
 
-	// Build SVG paths.
-	// CPU and Memory: left Y-axis, 0-100%, Y = 100 - value.
-	// Views: right Y-axis, auto-scaled to min/max range.
+	// Compute coordinates for each snapshot once.
 	totalSeconds := now.Sub(cutoff).Seconds()
-	var cpuBuf, memBuf, viewsBuf strings.Builder
 
+	type pointCoords struct {
+		x, cpuY, memY, viewsY float64
+		timeStr               string
+		cpuVal, memVal        string
+		viewsVal              string
+	}
+
+	points := make([]pointCoords, n)
 	for i, s := range snaps {
 		x := 0.0
 		if totalSeconds > 0 {
@@ -345,28 +350,71 @@ func (h *StatusHandler) buildGraph(ctx context.Context, dur time.Duration) vi.Gr
 		cpuY := clamp(percentScale - s.CPUPercent)
 		memY := clamp(percentScale - s.MemUsedPercent)
 
-		// Views: normalize to 0-100 range based on min/max.
 		var viewsY float64
 		if viewsRange > 0 {
 			viewsY = percentScale - float64(
 				s.TotalVisits-viewsMin,
 			)/float64(viewsRange)*percentScale
 		} else {
-			viewsY = percentMid // flat line when all values equal
+			viewsY = percentMid
 		}
 
+		points[i] = pointCoords{
+			x: x, cpuY: cpuY, memY: memY, viewsY: viewsY,
+			timeStr:  s.CreatedAt.Local().Format("15:04"),
+			cpuVal:   fmt.Sprintf("%.1f%%", s.CPUPercent),
+			memVal:   fmt.Sprintf("%.1f%%", s.MemUsedPercent),
+			viewsVal: strconv.FormatInt(s.TotalVisits, 10),
+		}
+	}
+
+	// Build SVG path strings from computed coordinates.
+	var cpuBuf, memBuf, viewsBuf strings.Builder
+	for i, p := range points {
 		cmd := "L"
 		if i == 0 {
 			cmd = "M"
 		}
-		fmt.Fprintf(&cpuBuf, "%s%.1f,%.1f ", cmd, x, cpuY)
-		fmt.Fprintf(&memBuf, "%s%.1f,%.1f ", cmd, x, memY)
-		fmt.Fprintf(&viewsBuf, "%s%.1f,%.1f ", cmd, x, viewsY)
+		fmt.Fprintf(&cpuBuf, "%s%.1f,%.1f ", cmd, p.x, p.cpuY)
+		fmt.Fprintf(&memBuf, "%s%.1f,%.1f ", cmd, p.x, p.memY)
+		fmt.Fprintf(&viewsBuf, "%s%.1f,%.1f ", cmd, p.x, p.viewsY)
 	}
-
 	data.CPUPath = cpuBuf.String()
 	data.MemPath = memBuf.String()
 	data.ViewsPath = viewsBuf.String()
+
+	// Build sampled points JSON for client-side tooltip lookup.
+	const maxTooltipPoints = 360
+	step := 1
+	if n > maxTooltipPoints {
+		step = (n + maxTooltipPoints - 1) / maxTooltipPoints // ceil division
+	}
+
+	var pointsBuf strings.Builder
+	pointsBuf.WriteByte('[')
+	first := true
+	for i := 0; i < n; i += step {
+		p := points[i]
+		if !first {
+			pointsBuf.WriteByte(',')
+		}
+		first = false
+		fmt.Fprintf(&pointsBuf, "[%.1f,%.1f,%.1f,%.1f,\"%s\",\"%s\",\"%s\",\"%s\"]",
+			p.x, p.cpuY, p.memY, p.viewsY,
+			p.timeStr, p.cpuVal, p.memVal, p.viewsVal,
+		)
+	}
+	// Always include last point if not already included.
+	if (n-1)%step != 0 {
+		p := points[n-1]
+		fmt.Fprintf(&pointsBuf, ",[%.1f,%.1f,%.1f,%.1f,\"%s\",\"%s\",\"%s\",\"%s\"]",
+			p.x, p.cpuY, p.memY, p.viewsY,
+			p.timeStr, p.cpuVal, p.memVal, p.viewsVal,
+		)
+	}
+	pointsBuf.WriteByte(']')
+	data.PointsJSON = pointsBuf.String()
+
 	return data
 }
 

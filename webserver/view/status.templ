@@ -11,9 +11,20 @@ templ StatusPage(args layout.RootArgs) {
 			<div
 				class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8"
 				data-init="@get('/status/events')"
-				data-signals="{memTotal:'',memUsed:'',memUsedPercent:'',cpuPercent:'',uptime:'',diskTotal:'',diskUsed:'',diskUsedPercent:'',graphRange:'1h',hoveredLine:'',tooltipX:0,tooltipY:0}"
+				data-signals="{memTotal:'',memUsed:'',memUsedPercent:'',cpuPercent:'',uptime:'',diskTotal:'',diskUsed:'',diskUsedPercent:'',graphRange:'1h',hoveredLine:'',tooltipX:0,tooltipY:0,graphPoints:[],hoverYIdx:1,hoverVIdx:5,dotLeft:-10,dotTop:-10,tooltipText:'',hoverActive:false,showCPU:true,showMem:true,showViews:true}"
 			>
 				<h1 class="text-2xl font-bold text-foreground mb-8">Server Status</h1>
+				<script>
+				function findNearestPoint(pts, xPct) {
+					if (!pts || !pts.length) return null;
+					var best = 0, bestD = Math.abs(xPct - pts[0][0]);
+					for (var i = 1; i < pts.length; i++) {
+						var d = Math.abs(xPct - pts[i][0]);
+						if (d < bestD) { bestD = d; best = i; }
+					}
+					return pts[best];
+				}
+				</script>
 				<!-- Metrics Graph -->
 				<div class="mb-8">
 					<div class="flex items-center justify-between mb-2">
@@ -92,7 +103,7 @@ templ StatsOverview(totalVisits int64, uniqueVisitors int64) {
 }
 
 templ MetricsGraph(data GraphData) {
-	<div class="rounded-lg border border-border bg-card p-4">
+	<div class="rounded-lg border border-border bg-card p-4 pb-8">
 		if data.TimeLabel != "" {
 			<div class="mb-4">
 				<span class="text-sm text-muted-foreground">{ data.TimeLabel }</span>
@@ -103,14 +114,29 @@ templ MetricsGraph(data GraphData) {
 				Collecting data...
 			</div>
 		} else {
-			<!-- Legend -->
+			<div style="display:none" data-signals={ fmt.Sprintf("{graphPoints:%s}", data.PointsJSON) }></div>
+			<!-- Legend (click to toggle line visibility, hover for tooltip) -->
 			<div class="flex flex-wrap gap-x-6 gap-y-1 mb-3 text-sm">
-				<div class="flex items-center gap-2">
+				<div
+					style="anchor-name: --legend-cpu; cursor: pointer;"
+					class="flex items-center gap-2 select-none transition-opacity"
+					data-class="{'opacity-40': !$showCPU}"
+					data-on:click="$showCPU = !$showCPU"
+					data-on:mouseenter="document.getElementById('legend-cpu-tip').showPopover()"
+					data-on:mouseleave="document.getElementById('legend-cpu-tip').hidePopover()"
+				>
 					<span class="inline-block h-0.5 w-4 bg-primary"></span>
 					<span class="text-muted-foreground">CPU</span>
 					<span class="font-medium text-foreground tabular-nums">{ data.CPULast }</span>
 				</div>
-				<div class="flex items-center gap-2">
+				<div
+					style="anchor-name: --legend-mem; cursor: pointer;"
+					class="flex items-center gap-2 select-none transition-opacity"
+					data-class="{'opacity-40': !$showMem}"
+					data-on:click="$showMem = !$showMem"
+					data-on:mouseenter="document.getElementById('legend-mem-tip').showPopover()"
+					data-on:mouseleave="document.getElementById('legend-mem-tip').hidePopover()"
+				>
 					<span class="inline-block h-0.5 w-4 bg-green-500"></span>
 					<span class="text-muted-foreground">Memory</span>
 					<span class="font-medium text-foreground tabular-nums">{ data.MemLast }</span>
@@ -118,21 +144,65 @@ templ MetricsGraph(data GraphData) {
 						<span class="text-xs text-muted-foreground">({ data.MemBytesLast })</span>
 					}
 				</div>
-				<div class="flex items-center gap-2">
+				<div
+					style="anchor-name: --legend-views; cursor: pointer;"
+					class="flex items-center gap-2 select-none transition-opacity"
+					data-class="{'opacity-40': !$showViews}"
+					data-on:click="$showViews = !$showViews"
+					data-on:mouseenter="document.getElementById('legend-views-tip').showPopover()"
+					data-on:mouseleave="document.getElementById('legend-views-tip').hidePopover()"
+				>
 					<span class="inline-block h-0.5 w-4 bg-orange-500"></span>
 					<span class="text-muted-foreground">Views</span>
 					<span class="font-medium text-foreground tabular-nums">{ data.ViewsLast }</span>
 				</div>
 			</div>
+			<!-- Legend tooltips (anchor-positioned popovers) -->
+			<div
+				id="legend-cpu-tip"
+				popover="manual"
+				class="rounded-md border border-border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md pointer-events-none"
+				style="position: absolute; position-anchor: --legend-cpu; top: anchor(top); left: anchor(center); translate: -50% calc(-100% - 4px); z-index: 50;"
+			>
+				<div class="flex items-center gap-1.5">
+					<svg data-show="$showCPU" style="display:none" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+					<svg data-show="!$showCPU" style="display:none" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" x2="22" y1="2" y2="22"></line></svg>
+					<span data-text="$showCPU ? 'Hide' : 'Show'"></span>
+				</div>
+			</div>
+			<div
+				id="legend-mem-tip"
+				popover="manual"
+				class="rounded-md border border-border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md pointer-events-none"
+				style="position: absolute; position-anchor: --legend-mem; top: anchor(top); left: anchor(center); translate: -50% calc(-100% - 4px); z-index: 50;"
+			>
+				<div class="flex items-center gap-1.5">
+					<svg data-show="$showMem" style="display:none" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+					<svg data-show="!$showMem" style="display:none" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" x2="22" y1="2" y2="22"></line></svg>
+					<span data-text="$showMem ? 'Hide' : 'Show'"></span>
+				</div>
+			</div>
+			<div
+				id="legend-views-tip"
+				popover="manual"
+				class="rounded-md border border-border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md pointer-events-none"
+				style="position: absolute; position-anchor: --legend-views; top: anchor(top); left: anchor(center); translate: -50% calc(-100% - 4px); z-index: 50;"
+			>
+				<div class="flex items-center gap-1.5">
+					<svg data-show="$showViews" style="display:none" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+					<svg data-show="!$showViews" style="display:none" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" x2="22" y1="2" y2="22"></line></svg>
+					<span data-text="$showViews ? 'Hide' : 'Show'"></span>
+				</div>
+			</div>
 			<!-- Hover tooltip (fixed position, follows mouse) -->
 			<div
 				style="display: none; position: fixed; z-index: 50; pointer-events: none;"
-				data-show="$hoveredLine !== ''"
+				data-show="$hoverActive"
 				data-style:left="$tooltipX + 'px'"
 				data-style:top="($tooltipY - 40) + 'px'"
 			>
 				<div style="transform: translateX(-50%); white-space: nowrap;" class="rounded-md border border-border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md">
-					<span data-text="$hoveredLine"></span>
+					<span data-text="$tooltipText"></span>
 				</div>
 			</div>
 			<!-- Chart -->
@@ -154,79 +224,92 @@ templ MetricsGraph(data GraphData) {
 					<span>{ data.ViewsAxisMin }</span>
 				</div>
 				<!-- SVG chart area -->
-				<div class="mx-10 h-full">
+				<div class="mx-10 h-full relative overflow-hidden">
 					<svg viewBox="0 0 100 100" preserveAspectRatio="none" class="w-full h-full">
 						<!-- Grid lines at 25%, 50%, 75% -->
 						<line x1="0" y1="25" x2="100" y2="25" stroke="currentColor" class="text-border" stroke-width="0.5" vector-effect="non-scaling-stroke"></line>
 						<line x1="0" y1="50" x2="100" y2="50" stroke="currentColor" class="text-border" stroke-width="0.5" vector-effect="non-scaling-stroke"></line>
 						<line x1="0" y1="75" x2="100" y2="75" stroke="currentColor" class="text-border" stroke-width="0.5" vector-effect="non-scaling-stroke"></line>
-						<!-- CPU hit area -->
-						<path
-							d={ data.CPUPath }
-							fill="none"
-							stroke="transparent"
-							stroke-width="12"
-							vector-effect="non-scaling-stroke"
-							pointer-events="stroke"
-							style="cursor: pointer;"
-							data-on:mouseenter="$hoveredLine = 'CPU'"
-							data-on:mouseleave="$hoveredLine = ''"
-							data-on:mousemove__throttle.16ms="$tooltipX = evt.clientX; $tooltipY = evt.clientY"
-						></path>
-						<!-- CPU line -->
-						<path
-							d={ data.CPUPath }
-							fill="none"
-							stroke="hsl(var(--primary))"
-							stroke-width="2"
-							vector-effect="non-scaling-stroke"
-							pointer-events="none"
-						></path>
-						<!-- Memory hit area -->
-						<path
-							d={ data.MemPath }
-							fill="none"
-							stroke="transparent"
-							stroke-width="12"
-							vector-effect="non-scaling-stroke"
-							pointer-events="stroke"
-							style="cursor: pointer;"
-							data-on:mouseenter="$hoveredLine = 'Memory'"
-							data-on:mouseleave="$hoveredLine = ''"
-							data-on:mousemove__throttle.16ms="$tooltipX = evt.clientX; $tooltipY = evt.clientY"
-						></path>
-						<!-- Memory line -->
-						<path
-							d={ data.MemPath }
-							fill="none"
-							stroke="#22c55e"
-							stroke-width="2"
-							vector-effect="non-scaling-stroke"
-							pointer-events="none"
-						></path>
-						<!-- Views hit area -->
-						<path
-							d={ data.ViewsPath }
-							fill="none"
-							stroke="transparent"
-							stroke-width="12"
-							vector-effect="non-scaling-stroke"
-							pointer-events="stroke"
-							style="cursor: pointer;"
-							data-on:mouseenter="$hoveredLine = 'Views'"
-							data-on:mouseleave="$hoveredLine = ''"
-							data-on:mousemove__throttle.16ms="$tooltipX = evt.clientX; $tooltipY = evt.clientY"
-						></path>
-						<!-- Views line -->
-						<path
-							d={ data.ViewsPath }
-							fill="none"
-							stroke="#f97316"
-							stroke-width="2"
-							vector-effect="non-scaling-stroke"
-							pointer-events="none"
-						></path>
+						<!-- CPU -->
+						<g data-show="$showCPU">
+							<path
+								d={ data.CPUPath }
+								fill="none"
+								stroke="transparent"
+								stroke-width="12"
+								vector-effect="non-scaling-stroke"
+								pointer-events="stroke"
+								style="cursor: pointer;"
+								data-on:mouseenter="$hoveredLine = 'CPU'; $hoverYIdx = 1; $hoverVIdx = 5"
+								data-on:mouseleave="$hoveredLine = ''; $hoverActive = false; $tooltipText = ''"
+								data-on:mousemove__throttle.16ms="var svg = evt.currentTarget.closest('svg'); var rect = svg.getBoundingClientRect(); var xPct = (evt.clientX - rect.left) / rect.width * 100; var pt = findNearestPoint($graphPoints, xPct); $tooltipX = evt.clientX; $tooltipY = evt.clientY; $hoverActive = true; if (pt) { $dotLeft = pt[0]; $dotTop = pt[$hoverYIdx]; $tooltipText = $hoveredLine + ': ' + pt[$hoverVIdx] + ' at ' + pt[4]; }"
+							></path>
+							<path
+								d={ data.CPUPath }
+								fill="none"
+								stroke="hsl(var(--primary))"
+								stroke-width="2"
+								vector-effect="non-scaling-stroke"
+								pointer-events="none"
+							></path>
+						</g>
+						<!-- Memory -->
+						<g data-show="$showMem">
+							<path
+								d={ data.MemPath }
+								fill="none"
+								stroke="transparent"
+								stroke-width="12"
+								vector-effect="non-scaling-stroke"
+								pointer-events="stroke"
+								style="cursor: pointer;"
+								data-on:mouseenter="$hoveredLine = 'Memory'; $hoverYIdx = 2; $hoverVIdx = 6"
+								data-on:mouseleave="$hoveredLine = ''; $hoverActive = false; $tooltipText = ''"
+								data-on:mousemove__throttle.16ms="var svg = evt.currentTarget.closest('svg'); var rect = svg.getBoundingClientRect(); var xPct = (evt.clientX - rect.left) / rect.width * 100; var pt = findNearestPoint($graphPoints, xPct); $tooltipX = evt.clientX; $tooltipY = evt.clientY; $hoverActive = true; if (pt) { $dotLeft = pt[0]; $dotTop = pt[$hoverYIdx]; $tooltipText = $hoveredLine + ': ' + pt[$hoverVIdx] + ' at ' + pt[4]; }"
+							></path>
+							<path
+								d={ data.MemPath }
+								fill="none"
+								stroke="#22c55e"
+								stroke-width="2"
+								vector-effect="non-scaling-stroke"
+								pointer-events="none"
+							></path>
+						</g>
+						<!-- Views -->
+						<g data-show="$showViews">
+							<path
+								d={ data.ViewsPath }
+								fill="none"
+								stroke="transparent"
+								stroke-width="12"
+								vector-effect="non-scaling-stroke"
+								pointer-events="stroke"
+								style="cursor: pointer;"
+								data-on:mouseenter="$hoveredLine = 'Views'; $hoverYIdx = 3; $hoverVIdx = 7"
+								data-on:mouseleave="$hoveredLine = ''; $hoverActive = false; $tooltipText = ''"
+								data-on:mousemove__throttle.16ms="var svg = evt.currentTarget.closest('svg'); var rect = svg.getBoundingClientRect(); var xPct = (evt.clientX - rect.left) / rect.width * 100; var pt = findNearestPoint($graphPoints, xPct); $tooltipX = evt.clientX; $tooltipY = evt.clientY; $hoverActive = true; if (pt) { $dotLeft = pt[0]; $dotTop = pt[$hoverYIdx]; $tooltipText = $hoveredLine + ': ' + pt[$hoverVIdx] + ' at ' + pt[4]; }"
+							></path>
+							<path
+								d={ data.ViewsPath }
+								fill="none"
+								stroke="#f97316"
+								stroke-width="2"
+								vector-effect="non-scaling-stroke"
+								pointer-events="none"
+							></path>
+						</g>
 					</svg>
+					<!-- Hover dot -->
+					<div
+						style="display: none; position: absolute; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none;"
+						data-show="$hoverActive"
+						data-style:left="$dotLeft + '%'"
+						data-style:top="$dotTop + '%'"
+						data-class="{'bg-primary': $hoveredLine === 'CPU', 'bg-green-500': $hoveredLine === 'Memory', 'bg-orange-500': $hoveredLine === 'Views'}"
+					>
+						<div style="position: absolute; inset: -2px; border-radius: 50%; border: 2px solid hsl(var(--background));"></div>
+					</div>
 				</div>
 				<!-- Time axis -->
 				<div class="mx-10 flex justify-between text-[10px] text-muted-foreground mt-2 pb-2">

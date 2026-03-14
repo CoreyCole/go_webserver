@@ -18,4 +18,5 @@ type GraphData struct {
 	TimeLabel    string // e.g. "Last Hour", "Last 6 Hours"
 	TimeStart    string // left edge timestamp, e.g. "14:30"
 	TimeEnd      string // right edge timestamp, e.g. "15:30"
+	PointsJSON   string // JSON array for client-side tooltip lookup
 }

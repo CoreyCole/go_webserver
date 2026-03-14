@@ -8,6 +8,7 @@ Type=simple
 User=ubuntu
 Group=ubuntu
 WorkingDirectory=/home/ubuntu/go_webserver
+EnvironmentFile=/home/ubuntu/.config/go_webserver/env
 ExecStart=/home/ubuntu/go_webserver/bin/go_webserver
 Restart=always
 RestartSec=1
