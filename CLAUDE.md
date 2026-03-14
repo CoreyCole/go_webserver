@@ -16,6 +16,7 @@ Go server (Echo framework) serving a personal portfolio site with resume, markdo
 | `webserver/view/css/` | Tailwind v4 CSS with design tokens |
 | `webserver/lib/` | Markdown renderer, resume JSON parser, html-to-component |
 | `webserver/middleware/` | ZeroLog request logging |
+| `webserver/webhook/` | GitHub webhook handler for auto-deploy |
 | `public/` | Static assets (CSS, JS, favicons, markdown files, images) |
 
 ### Routes
@@ -29,6 +30,7 @@ Go server (Echo framework) serving a personal portfolio site with resume, markdo
 | `GET /status` | `status.GetStatus` | Real-time system metrics page |
 | `GET /status/events` | `status.GetStatusEvents` | SSE stream for metrics |
 | `POST /status/graph` | `status.PostGraphUpdate` | Graph range update |
+| `POST /webhook/github` | `webhook.HandleGitHub` | GitHub push webhook for auto-deploy |
 | `GET /*` | Echo static | Fallback: serves `public/` directory |
 
 ## Build
@@ -128,7 +130,10 @@ Client-side, SSE connections are initiated via `data-init="@get('/status/events'
 Real-time system metrics dashboard at `/status`.
 
 - **Metrics**: CPU%, Memory%, Disk%, uptime, totals — updated every 2 seconds via SSE
-- **Graph**: SVG line chart (CPU + Memory) with time range buttons (1h, 6h, 24h, 3d) — updated every 30 seconds
+- **Graph**: SVG line chart (CPU + Memory + Views) with time range buttons (1h, 6h, 24h, 3d) — updated every 30 seconds
+- **Graph hover**: Tooltip shows "Line: value at HH:MM" with a colored dot snapping to the nearest data point
+- **Legend toggle**: Click legend items to show/hide lines; hover shows anchor-positioned eye icon tooltip
+- **Points data**: `buildGraph` computes coordinates once in a `pointCoords` struct, reused for both SVG paths and a sampled JSON array (max 360 points) embedded as a Datastar signal for client-side tooltip lookup
 - **Ring buffer**: Max 8640 snapshots (3 days at 30s intervals)
 - **macOS fix**: `memUsed()` uses `Active + Wired` instead of `Used` (which inflates due to VM compressor)
 - **StatusHandler** starts a background goroutine on creation (`NewStatusHandler()`)
@@ -172,14 +177,39 @@ Two Bevy-compiled games hosted on S3 (`coreycole-games` bucket, `us-west-2`):
 
 Assets served from `https://coreycole-games.s3.us-west-2.amazonaws.com/games/`. The `public/games/` directory is gitignored.
 
+## Webhook Auto-Deploy
+
+`POST /webhook/github` receives GitHub push events and self-rebuilds:
+
+1. Verifies HMAC-SHA256 signature via `WEBHOOK_SECRET` env var
+2. On push to `main`: `git fetch/reset` → `sqlc generate` → `templ generate` → `tailwindcss` → `go build`
+3. Replaces running binary and sends `SIGTERM` for systemd restart
+4. Mutex prevents concurrent rebuilds; 5-minute timeout per command
+
+Secret is loaded via `EnvironmentFile=/home/ubuntu/.config/go_webserver/env` in the systemd unit.
+
+## CSS Anchor Positioning
+
+The `@oddbird/css-anchor-positioning` polyfill is loaded in `<head>` when native support is absent. Used for legend tooltips on the status page. Pattern:
+
+- Trigger: `style="anchor-name: --my-anchor"` + `data-on:mouseenter="document.getElementById('tip').showPopover()"`
+- Content: `popover="manual"` + `style="position: absolute; position-anchor: --my-anchor; top: anchor(top); left: anchor(center); translate: -50% calc(-100% - 4px);"`
+
+See `context/datastarui/` for the full tooltip/popover component reference.
+
 ## Configuration
 
-Port is configurable via the `PORT` environment variable (default: `3001`). Uses `kelseyhightower/envconfig`.
+Port and webhook secret are configurable via environment variables. Uses `kelseyhightower/envconfig`.
 
 ```bash
 PORT=8080 just run
+WEBHOOK_SECRET=xxx  # for GitHub webhook HMAC verification
 ```
 
 ## Known Quirks
 
 - **Resume JSON field swap**: `Company` and `Position` struct fields in `lib/resume_json_to_html.go` have intentionally swapped JSON tags (`"position"` and `"company"`) for PDF export compatibility.
+- **SQLite timestamps are UTC**: `CURRENT_TIMESTAMP` stores UTC. Use `.Local()` when formatting `CreatedAt` for display alongside `time.Now()` (which is local time). The graph tooltip had a timezone mismatch until this was fixed.
+- **SVG `preserveAspectRatio="none"` distorts circles**: The status graph SVG uses `viewBox="0 0 100 100"` with `preserveAspectRatio="none"`, so `<circle>` elements render as ellipses. The hover dot is an absolutely-positioned `<div>` outside the SVG instead, using CSS `%` positioning (viewBox 0-100 maps to 0%-100%).
+- **`data-signals` inside SSE-patched elements overwrites signals**: Putting `data-signals="{graphPoints:[...]}"` on an element inside a `PatchElementTempl(WithModeInner())` target causes Datastar's MutationObserver to pick up the new attribute and overwrite the signal value. This is used intentionally to update `$graphPoints` on each 30s graph re-render.
+- **Stale hover flash prevention**: When mouse moves from line A to line B, `mouseenter` fires before `mousemove`. Gate tooltip/dot visibility on a `$hoverActive` boolean set only by `mousemove` (not `mouseenter`), cleared by `mouseleave`.
