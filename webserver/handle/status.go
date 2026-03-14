@@ -36,6 +36,16 @@ const (
 	retentionCheckHour = 1   // hours between retention cleanup runs
 )
 
+// displayTZ is the timezone used for all user-facing timestamps.
+// The server may run in UTC (e.g., EC2), but times should display in Pacific.
+var displayTZ = func() *time.Location {
+	loc, err := time.LoadLocation("America/Los_Angeles")
+	if err != nil {
+		return time.UTC
+	}
+	return loc
+}()
+
 // memUsed returns meaningful memory usage figures.
 // On macOS, vm.Used includes compressed memory (the VM compressor) which
 // inflates the number to nearly 100% of physical RAM. Active + Wired
@@ -324,8 +334,8 @@ func (h *StatusHandler) buildGraph(ctx context.Context, dur time.Duration) vi.Gr
 		ViewsAxisMax: strconv.FormatInt(viewsMax, 10),
 		ViewsAxisMid: strconv.FormatInt(viewsMid, 10),
 		ViewsAxisMin: strconv.FormatInt(viewsMin, 10),
-		TimeStart:    cutoff.Format("15:04"),
-		TimeEnd:      now.Format("15:04"),
+		TimeStart:    cutoff.In(displayTZ).Format("15:04"),
+		TimeEnd:      now.In(displayTZ).Format("15:04"),
 	}
 
 	// Compute coordinates for each snapshot once.
@@ -361,7 +371,7 @@ func (h *StatusHandler) buildGraph(ctx context.Context, dur time.Duration) vi.Gr
 
 		points[i] = pointCoords{
 			x: x, cpuY: cpuY, memY: memY, viewsY: viewsY,
-			timeStr:  s.CreatedAt.Local().Format("15:04"),
+			timeStr:  s.CreatedAt.In(displayTZ).Format("15:04"),
 			cpuVal:   fmt.Sprintf("%.1f%%", s.CPUPercent),
 			memVal:   fmt.Sprintf("%.1f%%", s.MemUsedPercent),
 			viewsVal: strconv.FormatInt(s.TotalVisits, 10),
