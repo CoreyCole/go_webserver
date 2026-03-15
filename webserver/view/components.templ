@@ -10,10 +10,11 @@ templ MarkdownPage(content templ.Component) {
 	}
 }
 
-templ BevyPage(js string, wasm string, loadscript templ.Component) {
+templ BevyPage(js string, wasm string, loadscript templ.Component, baseHref string) {
 	<!DOCTYPE html>
 	<html>
 		<head>
+			<base href={ baseHref }/>
 			<link rel="preload" href={ wasm } as="fetch" type="application/wasm" crossorigin=""/>
 			<link rel="modulepreload" href={ js }/>
 		</head>

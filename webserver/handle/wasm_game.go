@@ -52,6 +52,7 @@ func GetGame(c echo.Context) error {
 }
 
 func serveGame(c echo.Context, gameDir string) error {
+	baseHref := fmt.Sprintf("%s/%s/", s3BaseURL, gameDir)
 	js := fmt.Sprintf("%s/%s/%s.js", s3BaseURL, gameDir, gameDir)
 	wasm := fmt.Sprintf("%s/%s/%s_bg.wasm", s3BaseURL, gameDir, gameDir)
 	loadscript := bevyLoadScript(js, wasm)
@@ -59,6 +60,7 @@ func serveGame(c echo.Context, gameDir string) error {
 		js,
 		wasm,
 		loadscript,
+		baseHref,
 	)
 	if err := view.Render(c.Request().Context(), c.Response().Writer); err != nil {
 		return echo.NewHTTPError(
