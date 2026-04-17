@@ -29,7 +29,6 @@
   "work": [
     {
       "highlights": [
-        "Shipped >1.7k PRs >2.3k commits across >6k files in <2 years (if you care around 1M net lines of code)",
         "Built full stack features for payouts, bonuses, compliance, onboarding, and data ingestion pipelines",
         "Designed and built an agentic pipeline for researching the codebase and proposing code change plans",
         "Self-hosted an internal OpenClaw Slack bot for engineering management, product research, and Linear ticket enrichment",
