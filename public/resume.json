@@ -29,8 +29,8 @@
   "work": [
     {
       "highlights": [
-        "Owned 0→1 payouts, bonuses, compliance, onboarding in Go, React TS, Temporal, Postgres",
-        "Built codebase research & planning tooling with Pi, Hermes, OpenAI, SQLite, Datastar, templ",
+        "Owned 0→1 payouts, bonuses, compliance, onboarding in Go, React TS, Temporal, Postgres, SQLc",
+        "Built codebase research & planning tooling with Pi, Hermes, OpenAI, SQLite, Datastar, templ, SQLc",
         "Shipped internal Slack bot for eng ops, product research, and Linear enrichment",
         "Used LLM tooling to fix bugs, reduce tech debt, and maintain velocity"
       ],
