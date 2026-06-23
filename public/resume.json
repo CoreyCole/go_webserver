@@ -31,7 +31,7 @@
       "highlights": [
         "Shipped 0→1 bonuses, payouts and onboarding in Go, React TS, connect rpc, Temporal, Postgres, SQLc",
         "Built optimistic-merge review router with AI summaries, LOC-balanced batches, sensitive-path CI gates",
-        "Deployed internal Slack bot for eng ops, product research, and Linear enrichment",
+        "Deployed internal Hermes Slack bot for eng ops, product research, and Linear enrichment",
         "Used LLM tooling to fix bugs, reduce tech debt, and parallelize autonomous velocity"
       ],
       "position": "Chestnut",
