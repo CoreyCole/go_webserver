@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if git diff --cached --quiet -- public/resume.json; then
+  exit 0
+fi
+
+./scripts/resume-template1.mjs public/resume.json public/resume.pdf
+git add public/resume.pdf

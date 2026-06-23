@@ -22,6 +22,11 @@ install:
     go mod download
     npm install -g pnpm@latest
     pnpm install
+    cp scripts/pre-commit .git/hooks/pre-commit
+    chmod +x .git/hooks/pre-commit
+
+resume:
+    ./scripts/resume-template1.mjs public/resume.json public/resume.pdf
 
 # Verify everything compiles (fmt + generate + lint + build)
 check:

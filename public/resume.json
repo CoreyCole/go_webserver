@@ -29,13 +29,14 @@
   "work": [
     {
       "highlights": [
-        "Owned 0→1 payouts, bonuses, compliance, onboarding in Go, React TS, Temporal, Postgres, SQLc",
-        "Built codebase research & planning tooling with Pi, Hermes, OpenAI, SQLite, Datastar, templ, SQLc",
-        "Shipped internal Slack bot for eng ops, product research, and Linear enrichment",
-        "Used LLM tooling to fix bugs, reduce tech debt, and maintain velocity"
+        "Shipped 0→1 bonuses, payouts and onboarding in Go, React TS, connect rpc, Temporal, Postgres, SQLc",
+        "Built optimistic-merge review router with AI summaries, LOC-balanced batches, sensitive-path CI gates",
+        "Deployed internal Slack bot for eng ops, product research, and Linear enrichment",
+        "Used LLM tooling to fix bugs, reduce tech debt, and parallelize autonomous velocity"
       ],
       "position": "Chestnut",
       "company": "Founding Engineer, Full Stack at a16z backed seed stage startup",
+      "name": "Founding Engineer, Full Stack at a16z backed seed stage startup",
       "location": "Seattle, WA",
       "startDate": "April 2024",
       "endDate": "Present"
@@ -53,7 +54,8 @@
       "location": "Seattle, WA",
       "startDate": "Jan 2020",
       "endDate": "Dec 2023",
-      "company": "Senior Software Engineer, Cofounder of Omnicom.ai (microphone sync app)"
+      "company": "Senior Software Engineer, Cofounder of Omnicom.ai (microphone sync app)",
+      "name": "Senior Software Engineer, Cofounder of Omnicom.ai (microphone sync app)"
     },
     {
       "highlights": [
@@ -62,6 +64,7 @@
         "Built internal analytics, logs, and error browser for faster debugging"
       ],
       "company": "Software Engineer, Cofounder of Halloo (Alexa/Google Home app)",
+      "name": "Software Engineer, Cofounder of Halloo (Alexa/Google Home app)",
       "location": "Seattle, WA",
       "startDate": "Apr 2018",
       "endDate": "Jan 2020",
@@ -76,6 +79,7 @@
       "startDate": "Sep 2015",
       "location": "Seattle, WA",
       "company": "Software Engineer, Cofounder",
+      "name": "Software Engineer, Cofounder",
       "position": "BellHapp Inc"
     },
     {
@@ -85,6 +89,7 @@
         "Visualized and debugged OLAP query bias using Angular and TypeScript"
       ],
       "company": "Research Demo Builder for Babak Salimi & Dan Suciu",
+      "name": "Research Demo Builder for Babak Salimi & Dan Suciu",
       "location": "Seattle, WA",
       "startDate": "Sep 2015",
       "endDate": "May 2018",
@@ -95,6 +100,7 @@
         "Built Magento e-commerce frontend proof of concept using PHP and SQL"
       ],
       "company": "Software Engineer",
+      "name": "Software Engineer",
       "location": "King of Prussia, PA",
       "startDate": "Jun 2015",
       "endDate": "Sep 2015",
@@ -127,8 +133,10 @@
   ],
   "projects": [
     {
-      "url": "",
-      "keywords": [null]
+      "name": "Vamos",
+      "description": "Company context and agentic software engineering workflow for planning, alignment and implementation.",
+      "url": "https://github.com/coreycole/vamos",
+      "keywords": ["Agentic software engineering"]
     }
   ],
   "awards": [
@@ -142,8 +150,8 @@
     "profile",
     "awards",
     "work",
-    "skills",
     "projects",
+    "skills",
     "education"
   ]
 }
